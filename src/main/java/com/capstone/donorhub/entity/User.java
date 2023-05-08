@@ -10,7 +10,7 @@ import org.aspectj.bridge.Message;
 import org.jetbrains.annotations.NotNull;
 
 @NoArgsConstructor
-@AllArgsConstructor
+
 @ToString
 
 @Entity
