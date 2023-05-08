@@ -21,15 +21,11 @@ public class AdminServiceImpl {
         return userRepository.findAll();
     }
 
-
-  
     public User saveUser(User userEntity) {
 
         return userRepository.save(userEntity);
     }
 
-
-  
     public User getSingleUser(int id) {
         java.util.Optional<User> userOptional = userRepository.findById(id);
         if(userOptional.isPresent()) {
@@ -39,21 +35,15 @@ public class AdminServiceImpl {
 
     }
 
-
-  
     public void deleteUser(int id) {
         userRepository.deleteById(id);
 
     }
-
-
-   
+ 
     public User updatUser(User user) {
         return userRepository.save(user);
     }
 
-
-    
     public List<User> getUserByName(String name) {
 
         return userRepository.findByName(name);
