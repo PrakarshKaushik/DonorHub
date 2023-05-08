@@ -50,3 +50,5 @@ public class AdminController {
 		return new ResponseEntity<List<User>>(adminServiceImpl.getUserByName(name), HttpStatus.OK);
 	}
 }
+
+//test comment
