@@ -9,15 +9,10 @@ import lombok.ToString;
 import org.aspectj.bridge.Message;
 import org.jetbrains.annotations.NotNull;
 
-<<<<<<< HEAD
 @NoArgsConstructor
-
+@AllArgsConstructor
 @ToString
-=======
->>>>>>> 572be39fe4e3a85649a90dec4babb67e934808a2
 
-@ToString
-@NoArgsConstructor
 @Entity
 @Table(name="user")
 public  @Data class User {

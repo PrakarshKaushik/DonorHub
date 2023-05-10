@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface AdminService {
     List<User> getAllUsers();
-    User saveUser(User user);
+    User saveUserEntity(User user);
     User getSingleUser(int id);
     void deleteUser(int id);
-    User updatUser (User user);
+    User updatUserEntity (User user);
 
     List<User> getUserByName(String Name);
 }
