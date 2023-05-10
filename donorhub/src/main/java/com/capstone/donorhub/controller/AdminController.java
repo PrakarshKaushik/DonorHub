@@ -4,6 +4,7 @@ import com.capstone.donorhub.entity.User;
 import com.capstone.donorhub.service.AdminService;
 import com.capstone.donorhub.service.AdminServiceImpl;
 
+
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
 public class AdminController {
 	@Autowired
 	private AdminServiceImpl adminServiceImpl;
@@ -49,5 +49,4 @@ public class AdminController {
 	public ResponseEntity<List<User>> getUserByName(@RequestParam String name){
 		return new ResponseEntity<List<User>>(adminServiceImpl.getUserByName(name), HttpStatus.OK);
 	}
-	
 }
