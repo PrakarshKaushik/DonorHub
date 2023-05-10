@@ -29,12 +29,11 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable()
 		.authorizeHttpRequests()
-				/*
-				 * .requestMatchers("/admin/**").hasRole("admin")
-				 * .requestMatchers("/donor/**").hasRole("donor")
-				 * .requestMatchers("/ngo/**").hasRole("ngo")
-				 */
-		.requestMatchers("/register").permitAll()
+				
+				  .requestMatchers("/admin/**").hasRole("admin")
+				  .requestMatchers("/donor/**").hasRole("donor")
+				  .requestMatchers("/ngo/**").hasRole("ngo")
+				  .requestMatchers("/register").permitAll()	 
 		.requestMatchers("/guest").permitAll()
 		.anyRequest()
 		.authenticated().and().httpBasic();
