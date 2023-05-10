@@ -12,5 +12,3 @@ public class DonorhubApplication {
 	}
 
 }
-
-//conflictTestComment
