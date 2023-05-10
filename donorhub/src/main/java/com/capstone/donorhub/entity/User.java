@@ -9,10 +9,9 @@ import lombok.ToString;
 import org.aspectj.bridge.Message;
 import org.jetbrains.annotations.NotNull;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@ToString
 
+@ToString
+@NoArgsConstructor
 @Entity
 @Table(name="user")
 public  @Data class User {
