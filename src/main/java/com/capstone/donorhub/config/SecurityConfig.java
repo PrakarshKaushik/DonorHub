@@ -13,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import com.capstone.donorhub.service.CustomUserDetailService;
 
 
-@EnableMethodSecurity(prePostEnabled = true)
+//@EnableMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
@@ -27,16 +27,25 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf().disable()
-		.authorizeHttpRequests()
-				
-				  .requestMatchers("/admin/**").hasRole("admin")
-				  .requestMatchers("/donor/**").hasRole("donor")
-				  .requestMatchers("/ngo/**").hasRole("ngo")
-				  .requestMatchers("/register").permitAll()	 
-		.requestMatchers("/guest").permitAll()
-		.anyRequest()
-		.authenticated().and().httpBasic();
+		
+		
+		  httpSecurity.csrf().disable() .authorizeHttpRequests()
+		  .requestMatchers("/register", "/guest/**").permitAll()
+		 .requestMatchers("/admin/**").hasRole("admin")
+		 .requestMatchers("/donor/**").hasRole("donor")
+		  .requestMatchers("/ngo/**").hasRole("ngo") .anyRequest()
+		  .authenticated().and().httpBasic();
+		 
+		/*
+		 * httpSecurity.csrf().disable()
+		 * .authorizeHttpRequests().requestMatchers("/register").permitAll().and()
+		 * .authorizeHttpRequests().requestMatchers("/guest").permitAll().and()
+		 * .authorizeHttpRequests().requestMatchers("/admin/**").hasRole("admin").and()
+		 * .authorizeHttpRequests().requestMatchers("/donor/**").hasRole("donor").and()
+		 * .authorizeHttpRequests().requestMatchers("/ngo/**").hasRole("ngo").and().
+		 * httpBasic();
+		 */
+		 
 		
 		return httpSecurity.build();
 	}
