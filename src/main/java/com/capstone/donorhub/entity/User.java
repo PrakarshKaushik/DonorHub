@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.aspectj.bridge.Message;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -20,6 +21,7 @@ public  @Data class User {
     @Column(name="user_id")
     private int userId;
     @NotNull
+ 
     @Email(message="Enter a valid email id")
     private String email;
    @NotNull
