@@ -20,10 +20,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@NoArgsConstructor
 
 @ToString
-
+@NoArgsConstructor
 @Entity
 @Table(name="user")
 public  @Data class User {
@@ -33,6 +32,7 @@ public  @Data class User {
     private int userId;
     
     @NotNull
+ 
     @Email(message="Enter a valid email id")
     private String email;
     

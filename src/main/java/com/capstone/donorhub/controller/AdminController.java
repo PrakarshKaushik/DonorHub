@@ -1,5 +1,6 @@
 package com.capstone.donorhub.controller;
 
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +25,7 @@ import com.capstone.donorhub.service.OrderServiceImpl;
 import jakarta.validation.Valid;
 //sd
 @RestController
+@RequestMapping("/admin")
 public class AdminController {
 	@Autowired
 	private AdminServiceImpl adminServiceImpl;
@@ -76,6 +79,5 @@ public class AdminController {
 	public ResponseEntity<List<User>> getUserByName(@RequestParam String name){
 		return new ResponseEntity<List<User>>(adminServiceImpl.getUserByName(name), HttpStatus.OK);
 	}
+	
 }
-
-//test comment1
