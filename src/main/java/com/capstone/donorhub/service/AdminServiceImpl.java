@@ -2,11 +2,12 @@ package com.capstone.donorhub.service;
 
 import java.util.List;
 
-import org.apache.el.stream.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.entity.User;
+import com.capstone.donorhub.respository.ItemRepository;
 import com.capstone.donorhub.respository.UserRepository;
 
 @Service
@@ -14,6 +15,9 @@ public class AdminServiceImpl {
 
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private ItemRepository itemRepository;
 
 
    
@@ -24,6 +28,10 @@ public class AdminServiceImpl {
     public User saveUser(User userEntity) {
 
         return userRepository.save(userEntity);
+    }
+    
+    public List<Items> getAllItem() {
+        return itemRepository.findAll();
     }
 
     public User getSingleUser(int id) {
@@ -37,6 +45,11 @@ public class AdminServiceImpl {
 
     public void deleteUser(int id) {
         userRepository.deleteById(id);
+
+    }
+    
+    public void deleteItem(int id) {
+        itemRepository.deleteById(id);
 
     }
  
