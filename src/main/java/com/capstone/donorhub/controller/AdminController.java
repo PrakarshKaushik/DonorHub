@@ -23,7 +23,7 @@ import com.capstone.donorhub.service.AdminServiceImpl;
 import com.capstone.donorhub.service.OrderServiceImpl;
 
 import jakarta.validation.Valid;
-//sd
+
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -33,48 +33,57 @@ public class AdminController {
 	@Autowired
 	private OrderServiceImpl orderServiceImpl;
 
+	//Endpoint - get all users
 	@GetMapping("/allUsers")
 	public List<User> getAllUsers() {
 		return adminServiceImpl.getAllUsers();
 	}
 	
+	//Endpoint - get all orders
 	@GetMapping("/allOrders")
 	public List<Orders> getAllOrders() {
 		return orderServiceImpl.getAllOrders();
 	}
 	
-	@GetMapping("/allItemsAdmin")
+	//Endpoint - get all items
+	@GetMapping("/allItems")
 	public List<Items> getAllItem() {
 		return adminServiceImpl.getAllItem();
 	}
 	
+	//Endpoint - get a user by id
 	@GetMapping("/users/{id}")
 	public User getUserById(@PathVariable int id) {
 		return adminServiceImpl.getSingleUser(id);
 	}
 	
-	@PostMapping("/Saveusers")
+	//Endpoint - add a user
+	@PostMapping("/saveUsers")
 	public User saveUser(@Valid @RequestBody User user) {
 		return adminServiceImpl.saveUser(user);
 	}
 	
-	@DeleteMapping("/Deleteuser")
+	//Endpoint - delete a user
+	@DeleteMapping("/deleteUser")
 	public String userDeleted(@RequestParam int id) {
 		 adminServiceImpl.deleteUser(id);
 		 return "User deleted";
 	}
 	
-	@DeleteMapping("/DeleteItemAdmin")
+	//Endpoint - delete an item
+	@DeleteMapping("/deleteItem")
 	public void itemDeleted(@RequestParam int id) {
 		 adminServiceImpl.deleteItem(id);
 	}
 	
-	@PutMapping("/Updateuser/{id}")
+	//Endpoint - Update user
+	@PutMapping("/updateUser/{id}")
 	public User updateUser(@PathVariable int id, @RequestBody User user) {
 		user.setUserId(id);
 		return adminServiceImpl.saveUser(user);
 	}
 	
+	//Endpoint - Find user by name
 	@GetMapping("/users/filterByName")
 	public ResponseEntity<List<User>> getUserByName(@RequestParam String name){
 		return new ResponseEntity<List<User>>(adminServiceImpl.getUserByName(name), HttpStatus.OK);

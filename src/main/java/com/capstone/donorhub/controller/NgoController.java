@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,34 +17,40 @@ import com.capstone.donorhub.entity.Orders;
 import com.capstone.donorhub.service.NgoServiceImpl;
 
 @RestController
+@RequestMapping("/ngo")
 public class NgoController {
 	
 	@Autowired
 	private NgoServiceImpl ngoServiceImpl;
 
-	@GetMapping("/allItemsNGO")
+	
+	//Endpoint - Get All item
+	@GetMapping("/allItems")
 	public List<Items> getAllItem() {
 		return ngoServiceImpl.getAllItems();
 	}
 	
-	@GetMapping("/allOrdersNGO")
+	//Endpoint - Get all Orders
+	@GetMapping("/allOrders")
 	public List<Orders> getAllOrders(@RequestParam int ngoId) {
 		return ngoServiceImpl.getAllOrders(ngoId);
 	}
 	
-	
-	@GetMapping("/itemsNgo/{id}")
+	//Endpoint - Get item by Id
+	@GetMapping("/items/{id}")
 	public Items getItemById(@PathVariable int id) {
 		return ngoServiceImpl.getSingleItem(id);
 	}
 
 	
+	//Endpoint - Buy Item
 	@PutMapping("/bookItems")
 	public Items bookItem(@RequestParam int itemId, @RequestParam int quantity, @RequestParam int ngoId) {
 		return ngoServiceImpl.bookItem(itemId, quantity,ngoId);
 	}
 	
-	@GetMapping("/items/filterByNameNgo")
+	//endpoint - Get Item by Name
+	@GetMapping("/items/filterByName")
 	public ResponseEntity<List<Items>> getItemByCategory(@RequestParam String name){
 		return new ResponseEntity<List<Items>>(ngoServiceImpl.getItemByName(name), HttpStatus.OK);
 	}
