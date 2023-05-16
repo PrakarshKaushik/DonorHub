@@ -1,6 +1,7 @@
 package com.capstone.donorhub.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -87,5 +88,15 @@ public class AdminController {
 	public ResponseEntity<List<User>> getUserByName(@RequestParam String name) {
 		return new ResponseEntity<List<User>>(adminServiceImpl.getUserByName(name), HttpStatus.OK);
 	}
+	
+	//Endpoint- Update Account Status
+	 @PutMapping("updateAccountStatus/{id}")
+	    public ResponseEntity<User> updateAccountStatus(
+	            @PathVariable int id,
+	            @RequestParam("status") String accountStatus
+	    ) {
+	        User updatedUser = adminServiceImpl.updateUserAccountStatus(id, accountStatus);
+	        return ResponseEntity.ok(updatedUser);
+	    }
 
 }
