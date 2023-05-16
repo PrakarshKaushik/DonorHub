@@ -1,6 +1,7 @@
 package com.capstone.donorhub.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -66,5 +67,17 @@ public class AdminServiceImpl {
 
 		return userRepository.findByName(name);
 	}
+	
+	 public User updateUserAccountStatus(int userId, String accountStatus) {
+	        Optional<User> optionalUser = userRepository.findById(userId);
+	        if (optionalUser.isPresent()) {
+	            User user = optionalUser.get();
+	            user.setAccount_status(accountStatus);
+	            userRepository.save(user);
+	            return user;
+	        } else {
+	            throw new RuntimeException("User not found with ID: " + userId);
+	        }
 
+}
 }
