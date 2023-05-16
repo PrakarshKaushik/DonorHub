@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -34,6 +35,8 @@ public  @Data class User {
     @NotNull
  
     @Email(message="Enter a valid email id")
+    @NotBlank(message="Email is required")
+    @Column(unique =true)
     private String email;
     
    @NotNull
@@ -54,11 +57,11 @@ public  @Data class User {
     private String address;
     
     @NotNull
-    @Column(name="contact")
+    @Column(name="contact", unique = true)
     private long contact;
 
     @Column(name="account_status")
-    private String account_status = "blocked";
+    private String account_status = "inactive";
     
     @JsonIgnore
     @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)

@@ -19,41 +19,38 @@ import com.capstone.donorhub.service.NgoServiceImpl;
 @RestController
 @RequestMapping("/ngo")
 public class NgoController {
-	
+
 	@Autowired
 	private NgoServiceImpl ngoServiceImpl;
 
-	
-	//Endpoint - Get All item
+	// Endpoint - Get All item
 	@GetMapping("/allItems")
 	public List<Items> getAllItem() {
 		return ngoServiceImpl.getAllItems();
 	}
-	
-	//Endpoint - Get all Orders
+
+	// Endpoint - Get all Orders
 	@GetMapping("/allOrders")
 	public List<Orders> getAllOrders(@RequestParam int ngoId) {
 		return ngoServiceImpl.getAllOrders(ngoId);
 	}
-	
-	//Endpoint - Get item by Id
+
+	// Endpoint - Get item by Id
 	@GetMapping("/items/{id}")
 	public Items getItemById(@PathVariable int id) {
 		return ngoServiceImpl.getSingleItem(id);
 	}
 
-	
-	//Endpoint - Buy Item
+	// Endpoint - Buy Item
 	@PutMapping("/bookItems")
 	public Items bookItem(@RequestParam int itemId, @RequestParam int quantity, @RequestParam int ngoId) {
-		return ngoServiceImpl.bookItem(itemId, quantity,ngoId);
+		return ngoServiceImpl.bookItem(itemId, quantity, ngoId);
 	}
-	
-	//endpoint - Get Item by Name
+
+	// endpoint - Get Item by Name
 	@GetMapping("/items/filterByName")
-	public ResponseEntity<List<Items>> getItemByCategory(@RequestParam String name){
+	public ResponseEntity<List<Items>> getItemByCategory(@RequestParam String name) {
 		return new ResponseEntity<List<Items>>(ngoServiceImpl.getItemByName(name), HttpStatus.OK);
 	}
-	
 
 }

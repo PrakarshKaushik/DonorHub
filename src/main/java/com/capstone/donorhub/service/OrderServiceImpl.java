@@ -1,4 +1,5 @@
 package com.capstone.donorhub.service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -15,50 +16,35 @@ import com.capstone.donorhub.respository.UserRepository;
 @Service
 public class OrderServiceImpl {
 
-	 @Autowired
-	    private UserRepository userRepository;
-	 
-	 @Autowired
-	    private ItemRepository itemRepository;
-	 
-	 @Autowired
-	    private OrderRepository orderRepository;
-	 
-	 
-	 @Autowired
-	 private UserRepository usRepository;
-	 
-	 
-	 public List<Orders> getAllOrders() {
-	        return orderRepository.findAll();
-	    }
-	 
-//	 public Orders addOrder(Orders order) {
-//
-//	        return orderRepository.save(order);
-//	    }
-	 
-	 public Orders placeOrder(Items item, int ngoId) {
-			Orders order = new Orders();
-			
-			order.setQuantity(item.getQuantity());
-			order.setItem(item);
-			Optional<User> user = userRepository.findById(ngoId);
-			if(user.isPresent()) {
-				order.setUser(user.get());
-			}
-			
-		    orderRepository.save(order);
-			
-			return order;
-		}
-	 
+	@Autowired
+	private UserRepository userRepository;
 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
+	@Autowired
+	private ItemRepository itemRepository;
+
+	@Autowired
+	private OrderRepository orderRepository;
+
+	@Autowired
+	private UserRepository usRepository;
+
+	public List<Orders> getAllOrders() {
+		return orderRepository.findAll();
+	}
+
+	public Orders placeOrder(Items item, int ngoId) {
+		Orders order = new Orders();
+
+		order.setQuantity(item.getQuantity());
+		order.setItem(item);
+		Optional<User> user = userRepository.findById(ngoId);
+		if (user.isPresent()) {
+			order.setUser(user.get());
+		}
+
+		orderRepository.save(order);
+
+		return order;
+	}
+
 }

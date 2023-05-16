@@ -21,31 +21,30 @@ import lombok.ToString;
 @Entity
 @Table(name = "Items")
 public @Data class Items {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="item_id")
+	@Column(name = "item_id")
 	private int itemId;
-	
+
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "user_id")
 	private User user;
-	
+
 	@NotNull
-    @Column(name="item_name")
+	@Column(name = "item_name")
 	private String itemName;
-	
+
 	@NotNull
-    @Column(name="category")
+	@Column(name = "category")
 	private String category;
-	
+
 	@NotNull
-    @Column(name="quantity")
+	@Column(name = "quantity")
 	private int quantity;
-	
+
 	@NotNull
-    @Column(name="delivery_mode")
+	@Column(name = "delivery_mode")
 	private String deliveryMode;
-	
 
 }

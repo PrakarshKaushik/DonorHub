@@ -9,7 +9,6 @@ import com.capstone.donorhub.entity.Items;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Items, Integer> {
-  public List<Items> findByItemName(String name);
-
+	public List<Items> findByItemName(String name);
 
 }

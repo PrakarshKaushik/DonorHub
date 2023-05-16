@@ -6,15 +6,15 @@ import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.entity.User;
 
 public interface NgoService {
-	
-	 	List<Items> getAllItems();
-	    User register(User user);
-	    Items getSingleItem(int id);
-//	    void deleteUser(int id);
-	    Items bookItem (int id,int quantity);
 
-	    List<Items> getItemByCategory(String Category);
-	
-	
+	List<Items> getAllItems();
+
+	User register(User user);
+
+	Items getSingleItem(int id);
+
+	Items bookItem(int id, int quantity);
+
+	List<Items> getItemByCategory(String Category);
 
 }
