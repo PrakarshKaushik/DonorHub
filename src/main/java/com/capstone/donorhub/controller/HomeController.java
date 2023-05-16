@@ -16,33 +16,32 @@ import jakarta.validation.Valid;
 
 @RestController
 public class HomeController {
-	
+
 	@Autowired
 	HomeServiceImpl homeServiceImpl;
 
-	//@PreAuthorize("hasRole('ROLE_donor')")
 	@GetMapping("/donor")
 	public ResponseEntity<String> donorUser() {
 		return ResponseEntity.ok("I'm a donor");
 	}
 
-	//@PreAuthorize("hasRole('ROLE_ngo')")
 	@GetMapping("/ngo")
 	public ResponseEntity<String> ngoUser() {
 		return ResponseEntity.ok("I'm a NGO");
 	}
 
-	//@PreAuthorize("hasRole('ROLE_admin')")
 	@GetMapping("/admin")
 	public ResponseEntity<String> adminUser() {
 		return ResponseEntity.ok("I'm an admin");
 	}
 
+	// Endpoint - Guest Page - No Login Required
 	@GetMapping("/guest")
 	public ResponseEntity<String> guestUser() {
 		return ResponseEntity.ok("I'm a guest");
 	}
-	
+
+	// Endpoint - Signup - New User
 	@PostMapping("/register")
 	public User registerUser(@Valid @RequestBody User user) {
 		return homeServiceImpl.registerUser(user);

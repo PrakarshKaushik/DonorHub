@@ -24,18 +24,17 @@ public class Orders {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int orderId;
-	
+
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "item_id")
 	private Items item;
-	
+
 	@ManyToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "ngo_id")
 	private User user;
-	
+
 	private int quantity;
-	
-	
+
 	public void setOrderId(int orderId) {
 		this.orderId = orderId + 1000;
 	}

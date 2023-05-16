@@ -10,41 +10,40 @@ import com.capstone.donorhub.respository.ItemRepository;
 
 @Service
 public class DonorServiceImpl {
-	
+
 	@Autowired
-    private ItemRepository itemRepository;
+	private ItemRepository itemRepository;
 
+	public List<Items> getAllItem() {
+		return itemRepository.findAll();
+	}
 
-    public List<Items> getAllItem() {
-        return itemRepository.findAll();
-    }
+	public Items saveItem(Items itemEntity) {
 
-    public Items saveItem(Items itemEntity) {
+		return itemRepository.save(itemEntity);
+	}
 
-        return itemRepository.save(itemEntity);
-    }
+	public Items getSingleItem(int id) {
+		java.util.Optional<Items> itemOptional = itemRepository.findById(id);
+		if (itemOptional.isPresent()) {
+			return itemOptional.get();
+		}
+		throw new RuntimeException("User not found for id: " + id);
 
-    public Items getSingleItem(int id) {
-        java.util.Optional<Items> itemOptional = itemRepository.findById(id);
-        if(itemOptional.isPresent()) {
-            return itemOptional.get();
-        }
-        throw new RuntimeException("User not found for id: "+id);
+	}
 
-    }
+	public void deleteItem(int id) {
+		itemRepository.deleteById(id);
 
-    public void deleteItem(int id) {
-        itemRepository.deleteById(id);
+	}
 
-    }
- 
-    public Items updateItem(Items item) {
-        return itemRepository.save(item);
-    }
+	public Items updateItem(Items item) {
+		return itemRepository.save(item);
+	}
 
-    public List<Items> getItemsByName(String name) {
+	public List<Items> getItemsByName(String name) {
 
-        return itemRepository.findByItemName(name);
-    }
+		return itemRepository.findByItemName(name);
+	}
 
 }

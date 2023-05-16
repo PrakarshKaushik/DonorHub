@@ -5,11 +5,15 @@ import com.capstone.donorhub.entity.User;
 import java.util.List;
 
 public interface AdminService {
-    List<User> getAllUsers();
-    User saveUser(User user);
-    User getSingleUser(int id);
-    void deleteUser(int id);
-    User updatUser (User user);
+	List<User> getAllUsers();
 
-    List<User> getUserByName(String Name);
+	User saveUser(User user);
+
+	User getSingleUser(int id);
+
+	void deleteUser(int id);
+
+	User updatUser(User user);
+
+	List<User> getUserByName(String Name);
 }
