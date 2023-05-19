@@ -10,6 +10,8 @@ public interface NgoService {
 	List<Items> getAllItems();
 
 	User register(User user);
+	
+	void cancelOrder(int orderId);
 
 	Items getSingleItem(int id);
 

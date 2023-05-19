@@ -56,31 +56,72 @@ public class NgoServiceImpl {
 //
 //	    }
 
-	public Items bookItem(int itemId, int quantity, int ngoId) {
+	public String bookItem(int itemId, int quantity, int ngoId) {
 		itemRepository.findById(itemId);
 		Optional<Items> itemOptional = itemRepository.findById(itemId);
 		Items bookedItem = null;
 		Items orederedItem = null;
+		
+		String str= "Item booked and will be delivered on time";
 
 		if (itemOptional.isPresent()) {
 			bookedItem = itemOptional.get();
 			int oldQuantity = bookedItem.getQuantity();
 
+			if(oldQuantity >= quantity)
+			{
 			bookedItem.setQuantity(quantity);
 			orderServiceImpl.placeOrder(bookedItem, ngoId);
 			bookedItem.setQuantity(oldQuantity - quantity);
 			itemRepository.save(bookedItem);
 
 			bookedItem.setQuantity(quantity);
+			
+			}
+			else
+			{
+				
+				str =" The available quantity is " + oldQuantity+ " Please order under available quantity or equal to the available quantity";
+			}
 
 		}
-		return bookedItem;
+		return str ;
 
 	}
 
 	public List<Items> getItemByName(String name) {
 
 		return itemRepository.findByItemName(name);
+	}
+	
+	public String cancelOrder(int orderId) {
+		Optional<Orders> itemOptional = orderRepository.findById(orderId);
+		Orders dummyorder = itemOptional.get();
+		
+		if (itemOptional.isPresent()) {
+		Items item = dummyorder.getItem();
+		int bookedQnt = dummyorder.getQuantity();
+		System.out.println("bookedQnt ="+bookedQnt);
+		int itemID = item.getItemId();
+		
+		Optional<Items> itemOptional2 = itemRepository.findById(itemID);
+		Items itemMain = itemOptional2.get();
+		int qnt = itemMain.getQuantity();
+		int c = qnt + bookedQnt;
+		itemMain.setQuantity(c);
+		itemRepository.save(itemMain);
+
+		
+		orderRepository.deleteById(orderId);
+		
+		return "Delted";
+		}
+		
+		else
+		{
+			return "order not present";
+		}
+
 	}
 
 }

@@ -1,10 +1,12 @@
 package com.capstone.donorhub.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.entity.Orders;
+import com.capstone.donorhub.respository.OrderRepository;
 import com.capstone.donorhub.service.NgoServiceImpl;
 
 @RestController
@@ -22,6 +25,9 @@ public class NgoController {
 
 	@Autowired
 	private NgoServiceImpl ngoServiceImpl;
+	
+	@Autowired
+	private OrderRepository orderRepo;
 
 	// Endpoint - Get All item
 	@GetMapping("/allItems")
@@ -43,14 +49,34 @@ public class NgoController {
 
 	// Endpoint - Buy Item
 	@PutMapping("/bookItems")
-	public Items bookItem(@RequestParam int itemId, @RequestParam int quantity, @RequestParam int ngoId) {
+	public String bookItem(@RequestParam int itemId, @RequestParam int quantity, @RequestParam int ngoId) {
 		return ngoServiceImpl.bookItem(itemId, quantity, ngoId);
+
+//		return ngoServiceImpl.bookItem(itemId, quantity, ngoId);
 	}
 
 	// endpoint - Get Item by Name
 	@GetMapping("/items/filterByName")
 	public ResponseEntity<List<Items>> getItemByCategory(@RequestParam String name) {
 		return new ResponseEntity<List<Items>>(ngoServiceImpl.getItemByName(name), HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/cancelOrder")
+	public String cancelOrder(@RequestParam int orderId) {
+		
+		String str;
+		Optional<Orders> itemOptional = orderRepo.findById(orderId);
+		if (itemOptional.isPresent()) {
+		ngoServiceImpl.cancelOrder(orderId);
+		
+		str = "Order Cancelled";
+		}
+		else
+		{
+			str =" No order present with this ID";
+		}
+		
+		return str;
 	}
 
 }
