@@ -25,13 +25,12 @@ public class OrderServiceImpl {
 	@Autowired
 	private OrderRepository orderRepository;
 
-	@Autowired
-	private UserRepository usRepository;
-
+	//GetAllOrders
 	public List<Orders> getAllOrders() {
 		return orderRepository.findAll();
 	}
 
+	//Place Order
 	public Orders placeOrder(Items item, int ngoId) {
 		Orders order = new Orders();
 

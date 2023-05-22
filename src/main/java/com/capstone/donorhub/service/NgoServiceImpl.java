@@ -28,20 +28,26 @@ public class NgoServiceImpl {
 	@Autowired
 	private OrderServiceImpl orderServiceImpl;
 
+	//GetAllItems
 	public List<Items> getAllItems() {
 		return itemRepository.findAll();
 	}
 
+	//GetAllOrders
 	public List<Orders> getAllOrders(int ngoId) {
 
 		return orderRepository.findAllOrdersByUser(ngoId);
 	}
 
-	public User register(User user) {
 
-		return userRepository.save(user);
-	}
-
+	/*
+	 * public User register(User user) {
+	 * 
+	 * return userRepository.save(user); }
+	 */
+	
+	
+	//GetSingleItem
 	public Items getSingleItem(int id) {
 		java.util.Optional<Items> itemOptional = itemRepository.findById(id);
 		if (itemOptional.isPresent()) {
@@ -51,11 +57,8 @@ public class NgoServiceImpl {
 
 	}
 
-//	    public void deleteUser(int id) {
-//	        userRepository.deleteById(id);
-//
-//	    }
 
+	//Book Item
 	public String bookItem(int itemId, int quantity, int ngoId) {
 		itemRepository.findById(itemId);
 		Optional<Items> itemOptional = itemRepository.findById(itemId);
@@ -89,11 +92,13 @@ public class NgoServiceImpl {
 
 	}
 
+	//Get Items By Name
 	public List<Items> getItemByName(String name) {
 
 		return itemRepository.findByItemName(name);
 	}
 	
+	//Cancel Order
 	public String cancelOrder(int orderId) {
 		Optional<Orders> itemOptional = orderRepository.findById(orderId);
 		Orders dummyorder = itemOptional.get();
