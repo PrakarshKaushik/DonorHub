@@ -29,31 +29,41 @@ public class NgoController {
 	@Autowired
 	private OrderRepository orderRepo;
 
+	
+	//--------------------------------------------------------------
 	// Endpoint - Get All item
 	@GetMapping("/allItems")
 	public List<Items> getAllItem() {
 		return ngoServiceImpl.getAllItems();
 	}
+	
+	//----------------------------------------------------------------
 
 	// Endpoint - Get all Orders
 	@GetMapping("/allOrders")
 	public List<Orders> getAllOrders(@RequestParam int ngoId) {
 		return ngoServiceImpl.getAllOrders(ngoId);
 	}
+	
+	//-----------------------------------------------------------------
 
 	// Endpoint - Get item by Id
 	@GetMapping("/items/{id}")
 	public Items getItemById(@PathVariable int id) {
 		return ngoServiceImpl.getSingleItem(id);
 	}
+	
+	//------------------------------------------------------------------
 
 	// Endpoint - Buy Item
 	@PutMapping("/bookItems")
 	public String bookItem(@RequestParam int itemId, @RequestParam int quantity, @RequestParam int ngoId) {
+		
 		return ngoServiceImpl.bookItem(itemId, quantity, ngoId);
 
-//		return ngoServiceImpl.bookItem(itemId, quantity, ngoId);
 	}
+	
+	//----------------------------------------------------------------
 
 	// endpoint - Get Item by Name
 	@GetMapping("/items/filterByName")
@@ -61,22 +71,16 @@ public class NgoController {
 		return new ResponseEntity<List<Items>>(ngoServiceImpl.getItemByName(name), HttpStatus.OK);
 	}
 	
+	//--------------------------------------------------------------
 	@DeleteMapping("/cancelOrder")
 	public String cancelOrder(@RequestParam int orderId) {
 		
-		String str;
-		Optional<Orders> itemOptional = orderRepo.findById(orderId);
-		if (itemOptional.isPresent()) {
-		ngoServiceImpl.cancelOrder(orderId);
+
+		return ngoServiceImpl.cancelOrder(orderId);
+			
 		
-		str = "Order Cancelled";
-		}
-		else
-		{
-			str =" No order present with this ID";
-		}
-		
-		return str;
 	}
+	
+	//---------------------------------------------------------------
 
 }
