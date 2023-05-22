@@ -14,15 +14,18 @@ public class DonorServiceImpl {
 	@Autowired
 	private ItemRepository itemRepository;
 
+	//GetAllItems
 	public List<Items> getAllItem() {
 		return itemRepository.findAll();
 	}
 
+	//AddItem
 	public Items saveItem(Items itemEntity) {
 
 		return itemRepository.save(itemEntity);
 	}
 
+	//GetSingleItem
 	public Items getSingleItem(int id) {
 		java.util.Optional<Items> itemOptional = itemRepository.findById(id);
 		if (itemOptional.isPresent()) {
@@ -32,15 +35,18 @@ public class DonorServiceImpl {
 
 	}
 
+	//DeleteItem
 	public void deleteItem(int id) {
 		itemRepository.deleteById(id);
 
 	}
 
+	//UpdateItem
 	public Items updateItem(Items item) {
 		return itemRepository.save(item);
 	}
 
+	//GetItemByName
 	public List<Items> getItemsByName(String name) {
 
 		return itemRepository.findByItemName(name);
