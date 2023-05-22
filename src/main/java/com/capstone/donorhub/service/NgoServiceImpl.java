@@ -1,5 +1,6 @@
 package com.capstone.donorhub.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,44 +29,47 @@ public class NgoServiceImpl {
 	@Autowired
 	private OrderServiceImpl orderServiceImpl;
 
-	//GetAllItems
 	public List<Items> getAllItems() {
 		return itemRepository.findAll();
 	}
 
-	//GetAllOrders
 	public List<Orders> getAllOrders(int ngoId) {
 
 		return orderRepository.findAllOrdersByUser(ngoId);
 	}
 
+	public User register(User user) {
 
-	/*
-	 * public User register(User user) {
-	 * 
-	 * return userRepository.save(user); }
-	 */
+		return userRepository.save(user);
+	}
+
+	//--------------------------------------------------------------------------------
 	
-	
-	//GetSingleItem
 	public Items getSingleItem(int id) {
+		
+		Items c= null;
 		java.util.Optional<Items> itemOptional = itemRepository.findById(id);
 		if (itemOptional.isPresent()) {
 			return itemOptional.get();
 		}
-		throw new RuntimeException("Item not found for id: " + id);
+		else
+		{
+			return c;
+		}
+//		throw new RuntimeException("Item not found for id: " + id);
 
 	}
 
 
-	//Book Item
+//-----------------------------------------------------------------------------------------
+	
 	public String bookItem(int itemId, int quantity, int ngoId) {
 		itemRepository.findById(itemId);
 		Optional<Items> itemOptional = itemRepository.findById(itemId);
 		Items bookedItem = null;
 		Items orederedItem = null;
 		
-		String str= "Item booked and will be delivered on time";
+		String str= " ";
 
 		if (itemOptional.isPresent()) {
 			bookedItem = itemOptional.get();
@@ -80,6 +84,8 @@ public class NgoServiceImpl {
 
 			bookedItem.setQuantity(quantity);
 			
+			str ="Item booked and will be delivered on time";
+			
 			}
 			else
 			{
@@ -88,22 +94,42 @@ public class NgoServiceImpl {
 			}
 
 		}
+		else
+		{
+			str ="No such item is present";
+		}
 		return str ;
 
 	}
+	
+	//------------------------------------------------------------------------------
 
-	//Get Items By Name
 	public List<Items> getItemByName(String name) {
+		
+		List<Items> dummy = new ArrayList<Items>();
+		
+		List<Items> item = itemRepository.findByItemName(name);
+		
+		if(item.isEmpty())
+		{
+			return dummy;
+		}
+		else
+		{
+			return itemRepository.findByItemName(name);
 
-		return itemRepository.findByItemName(name);
+		}
+
+
 	}
 	
-	//Cancel Order
+	//-------------------------------------------------------------------------------
 	public String cancelOrder(int orderId) {
 		Optional<Orders> itemOptional = orderRepository.findById(orderId);
-		Orders dummyorder = itemOptional.get();
 		
 		if (itemOptional.isPresent()) {
+			
+		Orders dummyorder = itemOptional.get();
 		Items item = dummyorder.getItem();
 		int bookedQnt = dummyorder.getQuantity();
 		System.out.println("bookedQnt ="+bookedQnt);
@@ -119,7 +145,7 @@ public class NgoServiceImpl {
 		
 		orderRepository.deleteById(orderId);
 		
-		return "Delted";
+		return "Deleted";
 		}
 		
 		else
@@ -128,5 +154,6 @@ public class NgoServiceImpl {
 		}
 
 	}
+	//------------------------------------------------------------------------------------
 
 }

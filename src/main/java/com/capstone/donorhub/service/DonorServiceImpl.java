@@ -1,5 +1,6 @@
 package com.capstone.donorhub.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,42 +15,73 @@ public class DonorServiceImpl {
 	@Autowired
 	private ItemRepository itemRepository;
 
-	//GetAllItems
 	public List<Items> getAllItem() {
 		return itemRepository.findAll();
 	}
 
-	//AddItem
 	public Items saveItem(Items itemEntity) {
 
 		return itemRepository.save(itemEntity);
 	}
+	
+	//---------------------------------------------------------
 
-	//GetSingleItem
 	public Items getSingleItem(int id) {
+
+		Items c= null;
 		java.util.Optional<Items> itemOptional = itemRepository.findById(id);
 		if (itemOptional.isPresent()) {
 			return itemOptional.get();
 		}
-		throw new RuntimeException("User not found for id: " + id);
+		else
+		{
+			return c;
+		}
 
 	}
+	
+	//----------------------------------------------------
 
-	//DeleteItem
-	public void deleteItem(int id) {
+	public String deleteItem(int id) {
+		java.util.Optional<Items> itemOptional = itemRepository.findById(id);
+		if (itemOptional.isPresent()) {
 		itemRepository.deleteById(id);
+		return "item deleted";
+		}
+		
+		else
+		{
+			return "No such item is present";
+		}
 
 	}
+	
 
-	//UpdateItem
+	//------------------------------------------------------
 	public Items updateItem(Items item) {
 		return itemRepository.save(item);
 	}
+	
+	
+	//--------------------------------------------------------
 
-	//GetItemByName
 	public List<Items> getItemsByName(String name) {
 
-		return itemRepository.findByItemName(name);
+		List<Items> dummy = new ArrayList<Items>();
+		
+		List<Items> item = itemRepository.findByItemName(name);
+		
+		if(item.isEmpty())
+		{
+			return dummy;
+		}
+		else
+		{
+			return itemRepository.findByItemName(name);
+
+		}
+		
 	}
+	//------------------------------------------------------------
 
 }
