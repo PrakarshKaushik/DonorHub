@@ -20,6 +20,11 @@ public class HomeController {
 	@Autowired
 	HomeServiceImpl homeServiceImpl;
 
+	@PostMapping("/login")
+	public ResponseEntity<String> login(){
+		return ResponseEntity.ok("Login");
+	}
+	
 	@GetMapping("/donor")
 	public ResponseEntity<String> donorUser() {
 		return ResponseEntity.ok("I'm a donor");

@@ -30,7 +30,7 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
-		httpSecurity.csrf().disable().authorizeHttpRequests().requestMatchers("/register", "/guest/**").permitAll()
+		httpSecurity.csrf().disable().authorizeHttpRequests().requestMatchers("/login", "/register", "/guest/**").permitAll()
 				.requestMatchers("/admin/**").hasRole("admin").requestMatchers("/donor/**").hasRole("donor")
 				.requestMatchers("/ngo/**").hasRole("ngo").anyRequest().authenticated().and().httpBasic()
 				.authenticationEntryPoint(customBasicAuthenticationEntryPoint);
