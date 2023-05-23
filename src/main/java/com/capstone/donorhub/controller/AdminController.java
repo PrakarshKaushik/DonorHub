@@ -66,8 +66,8 @@ public class AdminController {
 	// Endpoint - delete a user
 	@DeleteMapping("/deleteUser")
 	public String userDeleted(@RequestParam int id) {
-		adminServiceImpl.deleteUser(id);
-		return "User deleted";
+		return adminServiceImpl.deleteUser(id);
+		
 	}
 
 	// Endpoint - delete an item
