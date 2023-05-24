@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import com.capstone.donorhub.entity.CustomUserDetail;
 import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.entity.Orders;
 import com.capstone.donorhub.entity.User;
@@ -23,10 +25,16 @@ public class OrderServiceImpl {
 	private OrderRepository orderRepository;
 
 	//GetAllOrders
+	public List<Orders> getAllOrders(Authentication authentication) {
+		CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
+		System.out.println(userDetail.getUser().getName());
+		return orderRepository.findAllOrdersByNgoId(userDetail.getUser().getUserId());
+	}
+//AllOrders
 	public List<Orders> getAllOrders() {
 		return orderRepository.findAll();
 	}
-
+	
 	//Place Order
 	public Orders placeOrder(Items item, int l) {
 		Orders order = new Orders();
