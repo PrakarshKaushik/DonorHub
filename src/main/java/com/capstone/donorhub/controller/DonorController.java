@@ -1,6 +1,7 @@
 package com.capstone.donorhub.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.capstone.donorhub.entity.Items;
-import com.capstone.donorhub.service.AdminServiceImpl;
+import com.capstone.donorhub.entity.Orders;
+import com.capstone.donorhub.respository.ItemRepository;
 import com.capstone.donorhub.service.DonorServiceImpl;
+import com.capstone.donorhub.service.OrderServiceImpl;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
@@ -27,6 +31,13 @@ public class DonorController {
 
 	@Autowired
 	private DonorServiceImpl donorServiceImpl;
+	
+	@Autowired
+	private OrderServiceImpl orderServiceImpl;
+	
+	@Autowired
+	private ItemRepository itemRepository;
+	
 
 	// Endpoint - get all items
 	@GetMapping("/allItems")
@@ -56,11 +67,12 @@ public class DonorController {
 	}
 
 	// Endpoint - update an item listed
+	@Transactional
 	@PutMapping("/updateItem/{id}")
 	public String updateItem(@PathVariable int id, @RequestBody Items item) {
-		item.setItemId(id);
-		donorServiceImpl.saveItem(item);
-		return "Item update";
+		
+		return donorServiceImpl.updateItem(id, item);
+//		return "Item updated";
 	}
 
 	// Endpoint - find item by name
@@ -70,9 +82,9 @@ public class DonorController {
 	}
 
 	// Endpoint - Save order history of item
-	@PostMapping("/orderHistory")
-	public Items saveItemOrder(@Valid @RequestBody Items item) {
-		return donorServiceImpl.saveItem(item);
-	}
+		@GetMapping("/orderHistory")
+		public List<Orders> orderHistory() {
+			return orderServiceImpl.getAllOrders();
+		}
 
 }

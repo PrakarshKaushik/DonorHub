@@ -2,6 +2,7 @@ package com.capstone.donorhub.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class DonorServiceImpl {
 	public List<Items> getAllItem() {
 		return itemRepository.findAll();
 	}
+	
+	//---------------------------------------------------
 
 	public Items saveItem(Items itemEntity) {
 
@@ -58,8 +61,27 @@ public class DonorServiceImpl {
 	
 
 	//------------------------------------------------------
-	public Items updateItem(Items item) {
-		return itemRepository.save(item);
+	public String updateItem(int id, Items item) {
+		Optional<Items> oldItem = itemRepository.findById(id);
+		
+		if (oldItem.isPresent()) {
+			oldItem.get().setQuantity(item.getQuantity());
+			oldItem.get().setCategory(item.getCategory());
+			oldItem.get().setItemName(item.getItemName());
+			oldItem.get().setDeliveryMode(item.getDeliveryMode());
+			
+			 itemRepository.save(oldItem.get());
+			 return "Item updated";
+			 
+
+
+//		return itemRepository.save(item);
+	}
+		else
+		{
+			return "Item not found";
+		}
+		
 	}
 	
 	

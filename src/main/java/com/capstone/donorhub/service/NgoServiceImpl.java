@@ -29,14 +29,20 @@ public class NgoServiceImpl {
 	@Autowired
 	private OrderServiceImpl orderServiceImpl;
 
+	
+	//---------------------------------------------
 	public List<Items> getAllItems() {
 		return itemRepository.findAll();
 	}
 
+	//---------------------------------------------
+	
 	public List<Orders> getAllOrders(int ngoId) {
 
-		return orderRepository.findAllOrdersByUser(ngoId);
+		return orderRepository.findAllByUser(ngoId);
 	}
+	
+	//----------------------------------------------
 
 	public User register(User user) {
 
