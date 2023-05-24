@@ -51,9 +51,9 @@ public class AdminServiceImpl {
 		}
 		else
 		{
-			return c;
+	
+			throw new RuntimeException("User not found for id: " + id);
 		}
-//		throw new RuntimeException("User not found for id: " + id);
 
 	}
 	

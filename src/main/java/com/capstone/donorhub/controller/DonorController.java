@@ -62,8 +62,8 @@ public class DonorController {
 	// endpoint - delete an item
 	@DeleteMapping("/deleteItem")
 	public String itemDeleted(@RequestParam int itemId) {
-		donorServiceImpl.deleteItem(itemId);
-		return "item deleted";
+		return donorServiceImpl.deleteItem(itemId);
+//		return "item deleted";
 	}
 
 	// Endpoint - update an item listed
@@ -86,5 +86,11 @@ public class DonorController {
 		public List<Orders> orderHistory() {
 			return orderServiceImpl.getAllOrders();
 		}
+/*=======
+	@GetMapping("/orderHistory")
+	public Items saveItemOrder(@Valid @RequestBody Items item) {
+		return donorServiceImpl.saveItem(item);
+	}
+>>>>>>> 1cc90a0232c0d17e465a8259a2e3c1d4633746b5*/
 
 }

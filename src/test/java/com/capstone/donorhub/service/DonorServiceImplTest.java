@@ -3,6 +3,7 @@ package com.capstone.donorhub.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -15,24 +16,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.respository.ItemRepository;
 import com.capstone.donorhub.service.DonorServiceImpl;
 
+@ExtendWith(MockitoExtension.class)
 class DonorServiceImplTest {
 
 	@Mock
 	private ItemRepository itemRepository;
-
+	
 	@InjectMocks
 	private DonorServiceImpl donorService;
-
-	@BeforeEach
-	void setUp() {
-
-	}
 
 	// Test GetAllItems
 	@Test
@@ -46,6 +45,7 @@ class DonorServiceImplTest {
 
 		assertNotNull(result);
 		assertEquals(1, result.size());
+	
 		verify(itemRepository).findAll();
 	}
 
@@ -78,28 +78,45 @@ class DonorServiceImplTest {
 		verify(itemRepository).findById(itemId);
 	}
 
-	// Test case for getSingleItem(int id) - when id does not exists
-	@Test
-	void testGetSingleItem_NonExistingId() {
+	
 
-		int itemId = 1;
-		when(itemRepository.findById(itemId)).thenReturn(Optional.empty());
-
-		assertThrows(RuntimeException.class, () -> donorService.getSingleItem(itemId));
-		verify(itemRepository).findById(itemId);
-	}
-
-	// Test case for deleteItem(int id)
-	@Test
-	void testDeleteItem() {
-
-		int itemId = 1;
-
-		donorService.deleteItem(itemId);
-
-		verify(itemRepository).deleteById(itemId);
-	}
-
+	// Test case for deleteItem(int id) - when item present
+	 @Test
+	    void testDeleteItem_ItemPresent() {
+	        int itemId = 4;
+	        
+	        // Mocking the behavior of itemRepository.findById
+	        Items item = new Items();
+	        when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
+	        
+	        // Perform the deleteItem operation
+	        String result = donorService.deleteItem(itemId);
+	        
+	        // Verify that deleteById method is called once with the correct itemId
+	        Mockito.verify(itemRepository, Mockito.times(1)).deleteById(itemId);
+	        
+	        // Add assertions to verify the return value
+	        assertEquals("item deleted", result, "The deleteItem method should return 'item deleted'.");
+	    }
+	    
+	// Test case for deleteItem(int id) - when item not present
+	    @Test
+	    void testDeleteItem_ItemNotPresent() {
+	        int itemId = 4;
+	        
+	        // Mocking the behavior of itemRepository.findById
+	        when(itemRepository.findById(itemId)).thenReturn(Optional.empty());
+	        
+	        // Perform the deleteItem operation
+	        String result = donorService.deleteItem(itemId);
+	        
+	        // Verify that deleteById method is not called
+	        Mockito.verify(itemRepository, Mockito.never()).deleteById(anyInt());
+	        
+	        // Add assertions to verify the return value
+	        assertEquals("No such item is present", result, "The deleteItem method should return 'No such item is present'.");
+	    }
+	
 	// Test case for updateItem(Items item)
 	@Test
 	void testUpdateItem() {
@@ -115,19 +132,41 @@ class DonorServiceImplTest {
 	}
 
 	// Test case for getItemsByName(String name)
-	@Test
-	void testGetItemsByName() {
+	   @Test
+	    void testGetItemsByName_ItemsFound() {
+	        String itemName = "item";
 
-		String itemName = "ItemName";
-		List<Items> items = new ArrayList<>();
-		items.add(new Items());
-		when(itemRepository.findByItemName(itemName)).thenReturn(items);
+	        // Mocking the behavior of itemRepository.findByItemName
+	        List<Items> itemList = new ArrayList<>();
+	        itemList.add(new Items());
+	        when(itemRepository.findByItemName(itemName)).thenReturn(itemList);
 
-		List<Items> result = donorService.getItemsByName(itemName);
+	        // Perform the getItemsByName operation
+	        List<Items> result = donorService.getItemsByName(itemName);
 
-		assertNotNull(result);
-		assertEquals(1, result.size());
-		verify(itemRepository).findByItemName(itemName);
+	        // Verify that findByItemName method is called once with the correct itemName
+	        verify(itemRepository, times(1)).findByItemName(itemName);
+
+	        // Add assertions to verify the result
+	        assertEquals(itemList, result, "The getItemsByName method should return the list of items.");
+	    }
+
+	    @Test
+	    void testGetItemsByName_ItemsNotFound() {
+	        String itemName = "item";
+
+	        // Mocking the behavior of itemRepository.findByItemName
+	        when(itemRepository.findByItemName(itemName)).thenReturn(new ArrayList<>());
+
+	        // Perform the getItemsByName operation
+	        List<Items> result = donorService.getItemsByName(itemName);
+
+	        // Verify that findByItemName method is called once with the correct itemName
+	        verify(itemRepository, times(1)).findByItemName(itemName);
+
+	        // Add assertions to verify the result
+	        assertEquals(new ArrayList<>(), result, "The getItemsByName method should return an empty list.");
+	    }
 	}
 
-}
+

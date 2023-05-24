@@ -33,11 +33,11 @@ public class Orders {
 	@JoinColumn(name = "ngo_id")
 	private User user;
 
-	private int quantity;
-
 	public void setOrderId(int orderId) {
 		this.orderId = orderId + 1000;
 	}
+
+	private int quantity;
 
 	public void setItem(Items item) {
 		this.item = item;

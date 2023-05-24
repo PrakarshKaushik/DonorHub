@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -26,6 +27,15 @@ import com.capstone.donorhub.respository.ItemRepository;
 import com.capstone.donorhub.respository.UserRepository;
 import com.capstone.donorhub.service.AdminServiceImpl;
 
+
+import com.capstone.donorhub.service.AdminServiceImpl;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
+
+import static org.mockito.Mockito.verify;
+
 @ExtendWith(MockitoExtension.class)
 class AdminServiceImplTest {
 	@Mock
@@ -40,10 +50,6 @@ class AdminServiceImplTest {
 	@InjectMocks
 	private AdminServiceImpl adminService;
 
-	@BeforeEach
-	void init() {
-
-	}
 
 	// Test Get All Users
 	@Test
@@ -129,15 +135,46 @@ class AdminServiceImplTest {
 		assertThrows(RuntimeException.class, () -> adminService.getSingleUser(userId));
 	}
 
-	// DeleteUser
-	@Test
-	void testDeleteUser() {
-		int userId = 1;
+	// DeleteUser - if present
+	 @Test
+	    void testDeleteUser_UserPresent() {
+	        int userId = 4;
+	        
+	        // Mocking the behavior of userRepository.findById
+	        User user = new User();
+	        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+	        
+	        // Perform the deleteUser operation
+	        String result = adminService.deleteUser(userId);
+	        
+	        // Verify that deleteById method is called once with the correct userId
+	        Mockito.verify(userRepository, Mockito.times(1)).deleteById(userId);
+	        
+	        // Add assertions to verify the return value
+	        assertEquals("user deleted", result, "The deleteUser method should return 'user deleted'.");
+	    }
+	 
+	// DeleteUser - if not present   
+	    @Test
+	    void testDeleteUser_UserNotPresent() {
+	        int userId = 4;
+	        
+	        // Mocking the behavior of userRepository.findById
+	        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+	        
+	        // Perform the deleteUser operation
+	        String result = adminService.deleteUser(userId);
+	        
+	        // Verify that deleteById method is not called
+	        Mockito.verify(userRepository, Mockito.never()).deleteById(anyInt());
+	        
+	        // Add assertions to verify the return value
+	        assertEquals("no such user is present", result, "The deleteUser method should return 'no such user is present'.");
+	    }
+	
 
-		adminService.deleteUser(userId);
 
-		verify(userRepository).deleteById(userId);
-	}
+
 
 	// Test case for updateUser(User user)
 	@Test

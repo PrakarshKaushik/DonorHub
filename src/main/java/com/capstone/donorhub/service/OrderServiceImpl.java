@@ -22,9 +22,6 @@ public class OrderServiceImpl {
 	private UserRepository userRepository;
 
 	@Autowired
-	private ItemRepository itemRepository;
-
-	@Autowired
 	private OrderRepository orderRepository;
 
 	//GetAllOrders
@@ -39,12 +36,12 @@ public class OrderServiceImpl {
 	}
 	
 	//Place Order
-	public Orders placeOrder(Items item, int ngoId) {
+	public Orders placeOrder(Items item, int l) {
 		Orders order = new Orders();
 
 		order.setQuantity(item.getQuantity());
 		order.setItem(item);
-		Optional<User> user = userRepository.findById(ngoId);
+		Optional<User> user = userRepository.findById((int) l);
 		if (user.isPresent()) {
 			order.setUser(user.get());
 		}
