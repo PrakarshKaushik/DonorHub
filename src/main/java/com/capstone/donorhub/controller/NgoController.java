@@ -48,7 +48,7 @@ public class NgoController {
 	// Endpoint - Get all Orders
 	@GetMapping("/NgoAllOrders")
 	public List<Orders> getAllOrders(Authentication authentication) {
-		return orderServiceImpl.getAllOrders(authentication);
+		return orderServiceImpl.getAllNgoOrders(authentication);
 	}
 	
 	//-----------------------------------------------------------------

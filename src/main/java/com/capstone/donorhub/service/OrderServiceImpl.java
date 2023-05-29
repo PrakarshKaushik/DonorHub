@@ -25,9 +25,11 @@ public class OrderServiceImpl {
 	private OrderRepository orderRepository;
 
 	//GetAllOrders
-	public List<Orders> getAllOrders(Authentication authentication) {
+	public List<Orders> getAllNgoOrders(Authentication authentication) {
 		CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
 		System.out.println(userDetail.getUser().getName());
+		System.out.println(userDetail.getUser().getUserId());
+
 		return orderRepository.findAllOrdersByNgoId(userDetail.getUser().getUserId());
 	}
 //AllOrders
