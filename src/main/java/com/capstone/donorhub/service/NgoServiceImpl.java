@@ -37,9 +37,9 @@ public class NgoServiceImpl {
 
 	//---------------------------------------------
 	
-	public List<Orders> getAllOrders(int ngoId) {
+	public List<Orders> getAllOrders() {
 
-		return orderRepository.findAllByUser(ngoId);
+		return orderRepository.findAll();
 	}
 	
 	//----------------------------------------------
