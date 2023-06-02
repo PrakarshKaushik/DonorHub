@@ -57,6 +57,11 @@ public class NgoController {
 		
 		return ngoServiceImpl.getAllOrders(userDetail.getUser().getUserId());
 	}
+//=======
+//	public List<Orders> getAllOrders() {
+//		return ngoServiceImpl.getAllOrders();
+//>>>>>>> 4393660573b03175a51a3f9c3c14ec162836d1df
+//	}
 	
 	//-----------------------------------------------------------------
 
@@ -77,13 +82,7 @@ public class NgoController {
 
 		}
 
-//	// Endpoint - Buy Item
-//	@PutMapping("/bookItems")
-//	public String bookItem(@RequestParam int itemId, @RequestParam int quantity, @RequestParam int ngoId) {
-//		
-//		return ngoServiceImpl.bookItem(itemId, quantity, ngoId);
-//
-//	}
+
 	
 	//----------------------------------------------------------------
 
