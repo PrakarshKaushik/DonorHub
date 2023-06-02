@@ -1,5 +1,7 @@
 package com.capstone.donorhub.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,6 +20,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 @Table(name = "Orders")
 public class Orders {
 

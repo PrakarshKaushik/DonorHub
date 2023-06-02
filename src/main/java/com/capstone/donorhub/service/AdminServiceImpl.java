@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.capstone.donorhub.dto.ItemDTO;
+import com.capstone.donorhub.dto.UserDTO;
 import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.entity.User;
 import com.capstone.donorhub.respository.ItemRepository;
@@ -30,10 +33,19 @@ public class AdminServiceImpl {
 	}
 
 	//---------------------------------------------
-	public User saveUser(User user) {
-		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-		return userRepository.save(user);
+	public User saveUser(UserDTO userDTO) {
+		
+		User userEntity = new User();
+		
+		BeanUtils.copyProperties(userDTO, userEntity);
+		userEntity.setPassword(this.passwordEncoder.encode(userEntity.getPassword()));
+		return userRepository.save(userEntity);
 	}
+	
+//	public User saveUser(User user) {
+//		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+//		return userRepository.save(user);
+//	}
 
 	//-----------------------------------------------
 	public List<Items> getAllItem() {
@@ -76,10 +88,30 @@ public class AdminServiceImpl {
 	
 	//-------------------------------------------------------
 
-	public User updateUser(User user) {
-		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-		return userRepository.save(user);
+	public String updateUser(int id, UserDTO userDTO) {
+		Optional<User> oldUser = userRepository.findById(id);
+		
+		if (oldUser.isPresent()) {
+
+			
+			BeanUtils.copyProperties(userDTO, oldUser.get());
+			oldUser.get().setPassword(this.passwordEncoder.encode(userDTO.getPassword()));
+			
+			 userRepository.save(oldUser.get());
+			 return "Item Updated";
+		}
+		else
+		{
+			return "Item not found";
+		}
 	}
+			
+			 
+	
+//	public User updateUser(User user) {
+//		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+//		return userRepository.save(user);
+//	}
 
 	//------------------------------------------------------
 	public String deleteItem(int id) {

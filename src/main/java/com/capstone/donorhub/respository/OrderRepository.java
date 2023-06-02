@@ -15,6 +15,9 @@ public interface OrderRepository extends JpaRepository<Orders, Integer> {
 	List<Orders> findAllOrdersByNgoId(int ngoId);
 
 	List<Orders> findAllByUser(int ngoId);
+	
+	@Query(value ="select * from orders where ngo_id=:id",nativeQuery = true)
+	public List<Orders> ngoOrders(int id);
 
 
 }
