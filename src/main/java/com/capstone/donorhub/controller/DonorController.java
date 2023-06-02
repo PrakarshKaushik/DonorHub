@@ -1,7 +1,6 @@
 package com.capstone.donorhub.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capstone.donorhub.dto.ItemDTO;
+import com.capstone.donorhub.entity.CustomUserDetail;
 import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.entity.Orders;
 import com.capstone.donorhub.respository.ItemRepository;
@@ -41,8 +42,10 @@ public class DonorController {
 
 	// Endpoint - get all items
 	@GetMapping("/allItems")
-	public List<Items> getAllItem() {
-		return donorServiceImpl.getAllItem();
+	public List<Items> getAllItem(org.springframework.security.core.Authentication authentication) {
+		CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
+
+		return donorServiceImpl.donorItem(userDetail.getUser().getUserId());
 	}
 
 	// Endpoit - get item by id
@@ -53,11 +56,20 @@ public class DonorController {
 
 	// Endpoint - Add an item
 	@PostMapping("/addItem")
-	public String saveItem(@Valid @RequestBody Items item) {
-		donorServiceImpl.saveItem(item);
+	public String saveItem(@Valid @RequestBody ItemDTO itemDTO) {
+		System.out.println(itemDTO.getUserId());
+		donorServiceImpl.saveItem(itemDTO);
 		return "item added";
 
 	}
+	
+	
+//	@PostMapping("/addItem")
+//	public String saveItem(@Valid @RequestBody Items item) {
+//		donorServiceImpl.saveItem(item);
+//		return "item added";
+//
+//	}
 
 	// endpoint - delete an item
 	@DeleteMapping("/deleteItem")
@@ -69,9 +81,11 @@ public class DonorController {
 	// Endpoint - update an item listed
 	@Transactional
 	@PutMapping("/updateItem/{id}")
-	public String updateItem(@PathVariable int id, @RequestBody Items item) {
+	public String updateItem(@PathVariable int id, @RequestBody ItemDTO itemDTO,org.springframework.security.core.Authentication authentication) {
+		CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
 		
-		return donorServiceImpl.updateItem(id, item);
+		int userId= userDetail.getUser().getUserId();
+		return donorServiceImpl.updateItem(id, itemDTO,userId);
 //		return "Item updated";
 	}
 

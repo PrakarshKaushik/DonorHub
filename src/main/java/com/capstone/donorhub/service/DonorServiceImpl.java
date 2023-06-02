@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.capstone.donorhub.dto.ItemDTO;
 import com.capstone.donorhub.entity.Items;
+import com.capstone.donorhub.entity.User;
 import com.capstone.donorhub.respository.ItemRepository;
 
 @Service
@@ -16,16 +19,40 @@ public class DonorServiceImpl {
 	@Autowired
 	private ItemRepository itemRepository;
 
-	public List<Items> getAllItem() {
-		return itemRepository.findAll();
+	public List<Items> donorItem(int id) {
+		return itemRepository.donorItems(id);
 	}
 	
 	//---------------------------------------------------
 
-	public Items saveItem(Items itemEntity) {
+	
+	public Items saveItem(ItemDTO itemDTO) {
+		
+		Items itemEntity = new Items();
+		
+		BeanUtils.copyProperties(itemDTO, itemEntity);
+		User user = new User();
+		user.setUserId(itemDTO.getUserId());
+		
+		itemEntity.setUser(user);
+		
+		int c=itemEntity.getQuantity();
+		itemEntity.setOfrQuantity(c);
+//		itemRepository.save(itemEntity);
+		
 
 		return itemRepository.save(itemEntity);
-	}
+	} 
+	
+//	public Items saveItem(Items itemEntity) {
+//		
+//		int c=itemEntity.getQuantity();
+//		itemEntity.setOfrQuantity(c);
+////		itemRepository.save(itemEntity);
+//		
+//
+//		return itemRepository.save(itemEntity);
+//	}
 	
 	//---------------------------------------------------------
 
@@ -61,14 +88,21 @@ public class DonorServiceImpl {
 	
 
 	//------------------------------------------------------
-	public String updateItem(int id, Items item) {
+	public String updateItem(int id, ItemDTO itemDTO, int userId) {
 		Optional<Items> oldItem = itemRepository.findById(id);
 		
-		if (oldItem.isPresent()) {
-			oldItem.get().setQuantity(item.getQuantity());
-			oldItem.get().setCategory(item.getCategory());
-			oldItem.get().setItemName(item.getItemName());
-			oldItem.get().setDeliveryMode(item.getDeliveryMode());
+		int userIdItem= oldItem.get().getUser().getUserId();
+		
+		if (oldItem.isPresent() && userId==userIdItem) {
+			
+			oldItem.get().setOfrQuantity(itemDTO.getQuantity());
+			BeanUtils.copyProperties(itemDTO, oldItem.get());
+//			oldItem.get().setQuantity(item.getQuantity());
+//			oldItem.get().setCategory(item.getCategory());
+//			oldItem.get().setItemName(item.getItemName());
+//			oldItem.get().setDeliveryMode(item.getDeliveryMode());
+			
+			
 			
 			 itemRepository.save(oldItem.get());
 			 return "Item updated";
@@ -79,7 +113,7 @@ public class DonorServiceImpl {
 	}
 		else
 		{
-			return "Item not found";
+			return "Item not found or does not belog to the user ";
 		}
 		
 	}

@@ -1,5 +1,7 @@
 package com.capstone.donorhub.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,6 +19,7 @@ import lombok.ToString;
 @NoArgsConstructor
 
 @ToString
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 
 @Entity
 @Table(name = "Items")
@@ -38,9 +41,13 @@ public @Data class Items {
 	@NotNull
 	@Column(name = "category")
 	private String category;
+	
+	@NotNull
+	@Column(name = "Offered_quantity")
+	private int ofrQuantity;
 
 	@NotNull
-	@Column(name = "quantity")
+	@Column(name = "remaining_quantity")
 	private int quantity;
 
 	@NotNull

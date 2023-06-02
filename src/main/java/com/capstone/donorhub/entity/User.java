@@ -5,6 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
@@ -25,6 +26,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
+
 @Table(name="user")
 public  @Data class User {
     @Id

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.capstone.donorhub.dto.UserDTO;
 import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.entity.Orders;
 import com.capstone.donorhub.entity.User;
@@ -57,10 +58,18 @@ public class AdminController {
 	}
 
 	// Endpoint - add a user
+	
 	@PostMapping("/saveUsers")
-	public User saveUser(@Valid @RequestBody User user) {
-		return adminServiceImpl.saveUser(user);
+	public User saveUser(@Valid @RequestBody UserDTO userDTO) {
+		
+		return adminServiceImpl.saveUser(userDTO);
 	}
+	
+	
+//	@PostMapping("/saveUsers")
+//	public User saveUser(@Valid @RequestBody User user) {
+//		return adminServiceImpl.saveUser(user);
+//	}
 
 	// Endpoint - delete a user
 	@DeleteMapping("/deleteUser")
@@ -70,16 +79,16 @@ public class AdminController {
 	}
 
 	// Endpoint - delete an item
-	@DeleteMapping("/deleteItem")
-	public void itemDeleted(@RequestParam int id) {
-		adminServiceImpl.deleteItem(id);
-	}
+//	@DeleteMapping("/deleteItem")
+//	public void itemDeleted(@RequestParam int id) {
+//		adminServiceImpl.deleteItem(id);
+//	}
 
 	// Endpoint - Update user
 	@PutMapping("/updateUser/{id}")
-	public User updateUser(@PathVariable int id, @RequestBody User user) {
-		user.setUserId(id);
-		return adminServiceImpl.saveUser(user);
+	public String updateUser(@PathVariable int id, @RequestBody UserDTO userDTO) {
+		//user.setUserId(id);
+		return adminServiceImpl.updateUser(id, userDTO);
 	}
 
 	// Endpoint - Find user by name
