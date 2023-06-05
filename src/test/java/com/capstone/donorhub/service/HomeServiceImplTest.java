@@ -14,49 +14,44 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class HomeServiceImplTest {
 
-    @Mock
-    private UserRepository userRepository;
+	@Mock
+	private UserRepository userRepository;
 
-    @Mock
-    private PasswordEncoder passwordEncoder;
+	@Mock
+	private PasswordEncoder passwordEncoder;
 
-    @InjectMocks
-    private HomeServiceImpl homeService;
+	@InjectMocks
+	private HomeServiceImpl homeService;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
+	@BeforeEach
+	public void setup() {
+		MockitoAnnotations.openMocks(this);
+	}
 
-    @Test
-    public void testRegisterUser() {
-        // Create a sample user
-    	Mockito.mock(User.class);
-        User user = new User();
-        user.setEmail("john@gl.com");
-        user.setPassword("password");
+	@Test
+	public void testRegisterUser() {
 
-        // Mock the password encoder behavior
-        String encodedPassword = "encodedPassword";
-        when(passwordEncoder.encode(user.getPassword())).thenReturn(encodedPassword);
+		Mockito.mock(User.class);
+		User user = new User();
+		user.setEmail("john@gl.com");
+		user.setPassword("password");
 
-        // Mock the userRepository.save() method
-        User savedUser = new User();
-        savedUser.setEmail(user.getEmail());
-        savedUser.setPassword(encodedPassword);
-        when(userRepository.save(user)).thenReturn(savedUser);
+		String encodedPassword = "encodedPassword";
+		when(passwordEncoder.encode(user.getPassword())).thenReturn(encodedPassword);
 
-        // Invoke the registerUser() method
-        User registeredUser = homeService.registerUser(user);
+		User savedUser = new User();
+		savedUser.setEmail(user.getEmail());
+		savedUser.setPassword(encodedPassword);
+		when(userRepository.save(user)).thenReturn(savedUser);
 
-        // Verify the interactions and assertions
-        verify(userRepository).save(user);
-        assertEquals(savedUser, registeredUser);
-    }
+		User registeredUser = homeService.registerUser(user);
+
+		verify(userRepository).save(user);
+		assertEquals(savedUser, registeredUser);
+	}
 }

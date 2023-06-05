@@ -9,34 +9,31 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.junit.jupiter.api.Test;
 
-import java.lang.annotation.Annotation;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class OpenApiConfigTest {
 
-    @Test
-    void testOpenAPIDefinitionAnnotation() {
-        OpenAPIDefinition openAPIDefinition = OpenApiConfig.class.getAnnotation(OpenAPIDefinition.class);
+	@Test
+	void testOpenAPIDefinitionAnnotation() {
+		OpenAPIDefinition openAPIDefinition = OpenApiConfig.class.getAnnotation(OpenAPIDefinition.class);
 
-        assertNotNull(openAPIDefinition);
-        SecurityRequirement[] securityRequirements = openAPIDefinition.security();
-        assertEquals(1, securityRequirements.length);
-        SecurityRequirement securityRequirement = securityRequirements[0];
-        assertTrue(securityRequirement.name().equalsIgnoreCase("bearerAuth"));
-    }
+		assertNotNull(openAPIDefinition);
+		SecurityRequirement[] securityRequirements = openAPIDefinition.security();
+		assertEquals(1, securityRequirements.length);
+		SecurityRequirement securityRequirement = securityRequirements[0];
+		assertTrue(securityRequirement.name().equalsIgnoreCase("bearerAuth"));
+	}
 
-    @Test
-    void testSecuritySchemeAnnotation() {
-        SecurityScheme securityScheme = OpenApiConfig.class.getAnnotation(SecurityScheme.class);
+	@Test
+	void testSecuritySchemeAnnotation() {
+		SecurityScheme securityScheme = OpenApiConfig.class.getAnnotation(SecurityScheme.class);
 
-        assertNotNull(securityScheme);
-        assertEquals("bearerAuth", securityScheme.name());
-        assertEquals("JWT Auth Description", securityScheme.description());
-        assertEquals(SecuritySchemeType.HTTP, securityScheme.type());
-        assertEquals(SecuritySchemeIn.HEADER, securityScheme.in());
-        assertEquals("bearer", securityScheme.scheme());
-        assertEquals("JWT", securityScheme.bearerFormat());
-    }
+		assertNotNull(securityScheme);
+		assertEquals("bearerAuth", securityScheme.name());
+		assertEquals("JWT Auth Description", securityScheme.description());
+		assertEquals(SecuritySchemeType.HTTP, securityScheme.type());
+		assertEquals(SecuritySchemeIn.HEADER, securityScheme.in());
+		assertEquals("bearer", securityScheme.scheme());
+		assertEquals("JWT", securityScheme.bearerFormat());
+	}
 }
-

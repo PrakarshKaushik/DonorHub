@@ -2,7 +2,6 @@ package com.capstone.donorhub.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -18,34 +17,30 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.capstone.donorhub.entity.Orders;
 import com.capstone.donorhub.respository.OrderRepository;
 
-
 @SpringBootTest
 @ExtendWith({ MockitoExtension.class, SpringExtension.class })
 public class OrderRepositoryTest {
 
-    @Mock
-    private OrderRepository orderRepository;
+	@Mock
+	private OrderRepository orderRepository;
 
-    @Test
-    public void testFindAllOrdersByUser() {
-       
-        int ngoId = 1;
-        Orders order1 = new Orders();
-        Orders order2 = new Orders();
-        List<Orders> mockOrderList = new ArrayList<>();
-        mockOrderList.add(order1);
-        mockOrderList.add(order2);
+	// Test - FindAllOrders
+	@Test
+	public void testFindAllOrdersByUser() {
 
-       
-        when(orderRepository.findAllByUser(anyInt())).thenReturn(mockOrderList);
+		int ngoId = 1;
+		Orders order1 = new Orders();
+		Orders order2 = new Orders();
+		List<Orders> mockOrderList = new ArrayList<>();
+		mockOrderList.add(order1);
+		mockOrderList.add(order2);
 
-        
-        List<Orders> result = orderRepository.findAllByUser(ngoId);
+		when(orderRepository.findAllByUser(anyInt())).thenReturn(mockOrderList);
 
-        
-        assertEquals(2, result.size());
-        assertEquals(order1, result.get(0));
-        assertEquals(order2, result.get(1));
-    }
+		List<Orders> result = orderRepository.findAllByUser(ngoId);
+
+		assertEquals(2, result.size());
+		assertEquals(order1, result.get(0));
+		assertEquals(order2, result.get(1));
+	}
 }
-

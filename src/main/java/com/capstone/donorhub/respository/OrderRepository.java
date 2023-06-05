@@ -10,14 +10,13 @@ import com.capstone.donorhub.entity.Orders;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Integer> {
-	
+
 	@Query(value = "SELECT * FROM orders WHERE ngo_id =4", nativeQuery = true)
 	List<Orders> findAllOrdersByNgoId(int ngoId);
 
 	List<Orders> findAllByUser(int ngoId);
-	
-	@Query(value ="select * from orders where ngo_id=:id",nativeQuery = true)
-	public List<Orders> ngoOrders(int id);
 
+	@Query(value = "select * from orders where ngo_id=:id", nativeQuery = true)
+	public List<Orders> ngoOrders(int id);
 
 }

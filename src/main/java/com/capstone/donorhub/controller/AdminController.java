@@ -58,28 +58,23 @@ public class AdminController {
 	}
 
 	// Endpoint - add a user
-	
+
 	@PostMapping("/saveUsers")
 	public User saveUser(@Valid @RequestBody UserDTO userDTO) {
-		
+
 		return adminServiceImpl.saveUser(userDTO);
 	}
-	
-	
 
 	// Endpoint - delete a user
 	@DeleteMapping("/deleteUser")
 	public String userDeleted(@RequestParam int id) {
 		return adminServiceImpl.deleteUser(id);
-		
+
 	}
-
-
 
 	// Endpoint - Update user
 	@PutMapping("/updateUser/{id}")
 	public String updateUser(@PathVariable int id, @RequestBody UserDTO userDTO) {
-		//user.setUserId(id);
 		return adminServiceImpl.updateUser(id, userDTO);
 	}
 
@@ -88,15 +83,13 @@ public class AdminController {
 	public ResponseEntity<List<User>> getUserByName(@RequestParam String name) {
 		return new ResponseEntity<List<User>>(adminServiceImpl.getUserByName(name), HttpStatus.OK);
 	}
-	
-	//Endpoint- Update Account Status
-	 @PutMapping("updateAccountStatus/{id}")
-	    public ResponseEntity<User> updateAccountStatus(
-	            @PathVariable int id,
-	            @RequestParam("status") String accountStatus
-	    ) {
-	        User updatedUser = adminServiceImpl.updateUserAccountStatus(id, accountStatus);
-	        return ResponseEntity.ok(updatedUser);
-	    }
+
+	// Endpoint- Update Account Status
+	@PutMapping("updateAccountStatus/{id}")
+	public ResponseEntity<User> updateAccountStatus(@PathVariable int id,
+			@RequestParam("status") String accountStatus) {
+		User updatedUser = adminServiceImpl.updateUserAccountStatus(id, accountStatus);
+		return ResponseEntity.ok(updatedUser);
+	}
 
 }

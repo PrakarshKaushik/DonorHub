@@ -7,19 +7,16 @@ import static org.mockito.Mockito.*;
 
 class JwtServiceTest {
 
-    @Test
-    void testTokenValidation() {
-        
-        UserDetails userDetails = mock(UserDetails.class);
-        when(userDetails.getUsername()).thenReturn("testuser");
+	@Test
+	void testTokenValidation() {
 
-      
-        JwtService jwtService = new JwtService();
+		UserDetails userDetails = mock(UserDetails.class);
+		when(userDetails.getUsername()).thenReturn("testuser");
 
-        
-        String token = jwtService.generateToken("testuser");
+		JwtService jwtService = new JwtService();
 
-      
-        assertTrue(jwtService.validateToken(token, userDetails));
-    }
+		String token = jwtService.generateToken("testuser");
+
+		assertTrue(jwtService.validateToken(token, userDetails));
+	}
 }

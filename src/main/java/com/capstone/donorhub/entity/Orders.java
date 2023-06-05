@@ -20,7 +20,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 @Table(name = "Orders")
 public class Orders {
 
@@ -55,4 +55,3 @@ public class Orders {
 	}
 
 }
-//sdaw

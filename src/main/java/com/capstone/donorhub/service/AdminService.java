@@ -16,6 +16,6 @@ public interface AdminService {
 	User updatUser(User user);
 
 	List<User> getUserByName(String Name);
-	
-	 User updateUserAccountStatus(int userId, String accountStatus);
+
+	User updateUserAccountStatus(int userId, String accountStatus);
 }
