@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemDTO {
-	
+
 	private String itemName;
 	private String category;
 	private int quantity;
@@ -16,4 +16,3 @@ public class ItemDTO {
 	private String deliveryMode;
 
 }
-

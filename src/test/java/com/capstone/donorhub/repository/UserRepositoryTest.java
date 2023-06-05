@@ -28,7 +28,7 @@ class UserRepositoryTest {
 		MockitoAnnotations.openMocks(this);
 	}
 
-	// Name Found TestCase
+	// Test - Name Found TestCase
 	@Test
 	void testFindByName() {
 		Mockito.mock(User.class);
@@ -45,7 +45,7 @@ class UserRepositoryTest {
 
 	}
 
-	// Name Not Found TestCase
+	// Test - Name Not Found TestCase
 	@Test
 	void testFindByName_NotAvailable() {
 		User user = new User();
@@ -59,7 +59,7 @@ class UserRepositoryTest {
 		}
 	}
 
-	// Email Found TestCase
+	// Test - Email Found TestCase
 	@Test
 	void testFindByEmail() {
 
@@ -74,7 +74,7 @@ class UserRepositoryTest {
 		assertEquals(user.getEmail(), result.getEmail());
 	}
 
-	// Email Not Found TestCase
+	// Test - Email Not Found TestCase
 	@Test
 	void testFindByEmail_NotAvailable() {
 

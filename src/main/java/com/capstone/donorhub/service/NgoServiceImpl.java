@@ -29,140 +29,120 @@ public class NgoServiceImpl {
 	@Autowired
 	private OrderServiceImpl orderServiceImpl;
 
-	
-	//---------------------------------------------
+	// Get All Listed Items
 	public List<Items> getAllItems() {
 		return itemRepository.findAll();
 	}
 
-	//---------------------------------------------
-	
+	// All Orders by NGO
+
 	public List<Orders> getAllOrders(int id) {
 
 		return orderRepository.ngoOrders(id);
-}
+	}
 
-	
-
-	
-	//----------------------------------------------
+	// ----------------------------------------------
 
 	public User register(User user) {
 
 		return userRepository.save(user);
 	}
 
-	//--------------------------------------------------------------------------------
-	
+	// Find Item by Id
+
 	public Items getSingleItem(int id) {
-		
-		Items c= null;
+
+		Items c = null;
 		java.util.Optional<Items> itemOptional = itemRepository.findById(id);
 		if (itemOptional.isPresent()) {
 			return itemOptional.get();
-		}
-		else
-		{
+		} else {
 			return c;
 		}
 
-
 	}
 
+//Order Item
 
-//-----------------------------------------------------------------------------------------
-	
 	public String bookItem(int itemId, int quantity, int ngoId) {
 		itemRepository.findById(itemId);
 		Optional<Items> itemOptional = itemRepository.findById(itemId);
 		Items bookedItem = null;
-		Items orederedItem = null;
-		
-		String str= " ";
+
+		String str = " ";
 
 		if (itemOptional.isPresent()) {
 			bookedItem = itemOptional.get();
 			int oldQuantity = bookedItem.getQuantity();
 
-			if(oldQuantity >= quantity)
-			{
-			bookedItem.setQuantity(quantity);
-			orderServiceImpl.placeOrder(bookedItem, ngoId);
-			bookedItem.setQuantity(oldQuantity - quantity);
-			itemRepository.save(bookedItem);
+			if (oldQuantity >= quantity) {
+				bookedItem.setQuantity(quantity);
+				orderServiceImpl.placeOrder(bookedItem, ngoId);
+				bookedItem.setQuantity(oldQuantity - quantity);
+				itemRepository.save(bookedItem);
 
-			bookedItem.setQuantity(quantity);
-			
-			str ="Item booked and will be delivered on time";
-			
-			}
-			else
-			{
-				
-				str =" The available quantity is " + oldQuantity+ " Please order under available quantity or equal to the available quantity";
+				bookedItem.setQuantity(quantity);
+
+				str = "Item booked and will be delivered on time";
+
+			} else {
+
+				str = " The available quantity is " + oldQuantity
+						+ " Please order under available quantity or equal to the available quantity";
 			}
 
+		} else {
+			str = "No such item is present";
 		}
-		else
-		{
-			str ="No such item is present";
-		}
-		return str ;
+		return str;
 
 	}
-	
-	//------------------------------------------------------------------------------
+
+	// Find item by name
 
 	public List<Items> getItemByName(String name) {
-		
+
 		List<Items> dummy = new ArrayList<Items>();
-		
+
 		List<Items> item = itemRepository.findByItemName(name);
-		
-		if(item.isEmpty())
-		{
+
+		if (item.isEmpty()) {
 			return dummy;
-		}
-		else
-		{
+		} else {
 			return itemRepository.findByItemName(name);
 
 		}
 
-
 	}
-	
-	//-------------------------------------------------------------------------------
+
+	// Cancel Order
 	public String cancelOrder(int orderId) {
 		Optional<Orders> itemOptional = orderRepository.findById(orderId);
-		
-		if (itemOptional.isPresent()) {
-			
-		Orders dummyorder = itemOptional.get();
-		Items item = dummyorder.getItem();
-		int bookedQnt = dummyorder.getQuantity();
-		System.out.println("bookedQnt ="+bookedQnt);
-		int itemID = item.getItemId();
-		
-		Optional<Items> itemOptional2 = itemRepository.findById(itemID);
-		Items itemMain = itemOptional2.get();
-		int qnt = itemMain.getQuantity();
-		int c = qnt + bookedQnt;
-		itemMain.setQuantity(c);
-		itemRepository.save(itemMain);
 
-		
-		orderRepository.deleteById(orderId);
-		
-		return "Deleted";
+		if (itemOptional.isPresent()) {
+
+			Orders dummyorder = itemOptional.get();
+			Items item = dummyorder.getItem();
+			int bookedQnt = dummyorder.getQuantity();
+			System.out.println("bookedQnt =" + bookedQnt);
+			int itemID = item.getItemId();
+
+			Optional<Items> itemOptional2 = itemRepository.findById(itemID);
+			Items itemMain = itemOptional2.get();
+			int qnt = itemMain.getQuantity();
+			int c = qnt + bookedQnt;
+			itemMain.setQuantity(c);
+			itemRepository.save(itemMain);
+
+			orderRepository.deleteById(orderId);
+
+			return "Deleted";
 		}
-		
-		else
-		{
+
+		else {
 			return "order not present";
 		}
 
 	}
-	//------------------------------------------------------------------------------------
 
 }

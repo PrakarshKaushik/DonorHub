@@ -11,7 +11,6 @@ import com.capstone.donorhub.entity.CustomUserDetail;
 import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.entity.Orders;
 import com.capstone.donorhub.entity.User;
-import com.capstone.donorhub.respository.ItemRepository;
 import com.capstone.donorhub.respository.OrderRepository;
 import com.capstone.donorhub.respository.UserRepository;
 
@@ -24,7 +23,7 @@ public class OrderServiceImpl {
 	@Autowired
 	private OrderRepository orderRepository;
 
-	//GetAllOrders
+	// GetAllOrders
 	public List<Orders> getAllNgoOrders(Authentication authentication) {
 		CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
 		System.out.println(userDetail.getUser().getName());
@@ -32,12 +31,13 @@ public class OrderServiceImpl {
 
 		return orderRepository.findAllOrdersByNgoId(userDetail.getUser().getUserId());
 	}
+
 //AllOrders
 	public List<Orders> getAllOrders() {
 		return orderRepository.findAll();
 	}
-	
-	//Place Order
+
+	// Place Order
 	public Orders placeOrder(Items item, int l) {
 		Orders order = new Orders();
 

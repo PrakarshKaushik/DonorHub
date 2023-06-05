@@ -19,7 +19,7 @@ import lombok.ToString;
 @NoArgsConstructor
 
 @ToString
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 
 @Entity
 @Table(name = "Items")
@@ -41,7 +41,7 @@ public @Data class Items {
 	@NotNull
 	@Column(name = "category")
 	private String category;
-	
+
 	@NotNull
 	@Column(name = "Offered_quantity")
 	private int ofrQuantity;

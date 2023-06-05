@@ -7,17 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.entity.Orders;
-import com.capstone.donorhub.entity.User;
+
 import com.capstone.donorhub.respository.ItemRepository;
 import com.capstone.donorhub.respository.OrderRepository;
 import com.capstone.donorhub.respository.UserRepository;
@@ -40,7 +39,7 @@ class NgoServiceImplTest {
 	@InjectMocks
 	private NgoServiceImpl ngoService;
 
-	// GetAllItems
+	// Test - GetAllItems
 	@Test
 	void testGetAllItems() {
 
@@ -55,7 +54,7 @@ class NgoServiceImplTest {
 		verify(itemRepository, times(1)).findAll();
 	}
 
-	// GetAllOrders
+	// Test -GetAllOrders
 	@Test
 	void testGetAllOrders() {
 
@@ -63,15 +62,16 @@ class NgoServiceImplTest {
 		List<Orders> orders = new ArrayList<>();
 		orders.add(new Orders());
 		orders.add(new Orders());
-		when(orderRepository.findAllByUser(ngoId)).thenReturn(orders);
+		when(orderRepository.ngoOrders(ngoId)).thenReturn(orders);
 
 		List<Orders> result = ngoService.getAllOrders(ngoId);
 
 		assertEquals(2, result.size());
-		verify(orderRepository, times(1)).findAllByUser(ngoId);
+
+		verify(orderRepository, times(1)).ngoOrders(ngoId);
 	}
 
-//GetSingleItem - Item Present
+//Test -GetSingleItem - Item Present
 	@Test
 	void testGetSingleItem() {
 
@@ -86,7 +86,7 @@ class NgoServiceImplTest {
 		verify(itemRepository, times(1)).findById(itemId);
 	}
 
-	// BookItem - Quantity Available
+	// Test - BookItem - Quantity Available
 	@Test
 	void testBookItem_QuantityAvailable() {
 
@@ -105,10 +105,8 @@ class NgoServiceImplTest {
 		verify(itemRepository, times(1)).save(any(Items.class));
 		verify(orderServiceImpl, times(1)).placeOrder(any(Items.class), anyInt());
 	}
-	
 
-
-	// GetSingleItem - Item Not Present
+	// Test - GetSingleItem - Item Not Present
 	@Test
 	    void testGetSingleItem_ItemNotFound() {
 	        
@@ -122,7 +120,7 @@ class NgoServiceImplTest {
 	        verify(itemRepository, times(1)).findById(anyInt());
 	    }
 
-	// GetItemByName - Item Not Found
+	// Test - GetItemByName - Item Not Found
 	@Test
 	void testGetItemByName_ItemNotFound() {
 		// Prepare test data
@@ -136,7 +134,7 @@ class NgoServiceImplTest {
 		verify(itemRepository, times(1)).findByItemName(name);
 	}
 
-//CancelOrder- Order Exists
+//Test -CancelOrder- Order Exists
 	@Test
 	void testCancelOrder_OrderExists() {
 
@@ -159,7 +157,7 @@ class NgoServiceImplTest {
 		verify(orderRepository, times(1)).deleteById(orderId);
 	}
 
-//CancelOrder - Order Does Not Exists
+//Test -CancelOrder - Order Does Not Exists
 	@Test
 	void testCancelOrder_OrderNotExists() {
 

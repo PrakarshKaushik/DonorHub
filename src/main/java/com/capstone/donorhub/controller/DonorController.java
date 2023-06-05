@@ -19,7 +19,6 @@ import com.capstone.donorhub.dto.ItemDTO;
 import com.capstone.donorhub.entity.CustomUserDetail;
 import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.entity.Orders;
-import com.capstone.donorhub.respository.ItemRepository;
 import com.capstone.donorhub.service.DonorServiceImpl;
 import com.capstone.donorhub.service.OrderServiceImpl;
 
@@ -32,13 +31,9 @@ public class DonorController {
 
 	@Autowired
 	private DonorServiceImpl donorServiceImpl;
-	
+
 	@Autowired
 	private OrderServiceImpl orderServiceImpl;
-	
-	@Autowired
-	private ItemRepository itemRepository;
-	
 
 	// Endpoint - get all items
 	@GetMapping("/allItems")
@@ -62,25 +57,22 @@ public class DonorController {
 		return "item added";
 
 	}
-	
-	
-
 
 	// endpoint - delete an item
 	@DeleteMapping("/deleteItem")
 	public String itemDeleted(@RequestParam int itemId) {
 		return donorServiceImpl.deleteItem(itemId);
-//		return "item deleted";
 	}
 
 	// Endpoint - update an item listed
 	@Transactional
 	@PutMapping("/updateItem/{id}")
-	public String updateItem(@PathVariable int id, @RequestBody ItemDTO itemDTO,org.springframework.security.core.Authentication authentication) {
+	public String updateItem(@PathVariable int id, @RequestBody ItemDTO itemDTO,
+			org.springframework.security.core.Authentication authentication) {
 		CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
-		
-		int userId= userDetail.getUser().getUserId();
-		return donorServiceImpl.updateItem(id, itemDTO,userId);
+
+		int userId = userDetail.getUser().getUserId();
+		return donorServiceImpl.updateItem(id, itemDTO, userId);
 	}
 
 	// Endpoint - find item by name
@@ -90,10 +82,9 @@ public class DonorController {
 	}
 
 	// Endpoint - Save order history of item
-		@GetMapping("/orderHistory")
-		public List<Orders> orderHistory() {
-			return orderServiceImpl.getAllOrders();
-		}
-
+	@GetMapping("/orderHistory")
+	public List<Orders> orderHistory() {
+		return orderServiceImpl.getAllOrders();
+	}
 
 }

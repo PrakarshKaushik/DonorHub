@@ -1,10 +1,6 @@
 package com.capstone.donorhub.service;
 
-import javax.security.auth.login.AccountExpiredException;
-import javax.security.auth.login.AccountLockedException;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,16 +23,6 @@ public class CustomUserDetailService implements UserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException("No user found");
 		}
-
-		/*
-		 * if (user.getAccount_status().equals("inactive")) { throw new
-		 * AccountExpiredException("Your account is inactive. Please contact the administrator."
-		 * ); }
-		 * 
-		 * if (user.getAccount_status().equals("blocked")) { throw new
-		 * AccountLockedException("Your account is locked. Please contact the administrator."
-		 * ); }
-		 */
 
 		return new CustomUserDetail(user);
 	}

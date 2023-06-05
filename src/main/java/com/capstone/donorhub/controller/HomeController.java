@@ -28,10 +28,10 @@ public class HomeController {
 	AuthenticationManager authenticationManager;
 
 	@PostMapping("/login")
-	public ResponseEntity<String> login(){
+	public ResponseEntity<String> login() {
 		return ResponseEntity.ok("Login");
 	}
-	
+
 	@GetMapping("/donor")
 	public ResponseEntity<String> donorUser() {
 		return ResponseEntity.ok("I'm a donor");
@@ -52,14 +52,17 @@ public class HomeController {
 	public ResponseEntity<String> guestUser() {
 		return ResponseEntity.ok("I'm a guest");
 	}
-	
-	@PostMapping("/authenticate") public String////////////////////////////////////////////////////////////chnge
-    authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
-    Authentication authentication = authenticationManager.authenticate(new
-   UsernamePasswordAuthenticationToken(authRequest.getUsername(),
-    authRequest.getPassword())); if (authentication.isAuthenticated()) { return
-    jwtService.generateToken(authRequest.getUsername()); } else { return
-   "user not found"; } }
+
+	@PostMapping("/authenticate")
+	public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+		Authentication authentication = authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+		if (authentication.isAuthenticated()) {
+			return jwtService.generateToken(authRequest.getUsername());
+		} else {
+			return "user not found";
+		}
+	}
 
 	// Endpoint - Signup - New User
 	@PostMapping("/register")

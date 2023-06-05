@@ -22,52 +22,50 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer" })
 
-@Table(name="user")
-public  @Data class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id")
-    private int userId;
-    
-    @NotNull
- 
-    @Email(message="Enter a valid email id")
-    @NotBlank(message="Email is required")
-    @Column(unique =true)
-    private String email;
-    
-   @NotNull
-   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-   @Column(name="password")
-   private String password;
-   
-    @NotNull
-    @Column(name="role")
-    private String role;
-    
-    @NotNull
-    @Column(name="display_name")
-    private String name;
-    
-    @NotNull
-    @Column(name="address")
-    private String address;
-    
-    @NotNull
-    @Column(name="contact", unique = true)
-    private long contact;
+@Table(name = "user")
+public @Data class User {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
+	private int userId;
 
-    @Column(name="account_status")
-    private String account_status = "inactive";
-    
-    @JsonIgnore
-    @OneToMany(mappedBy ="user", cascade = CascadeType.ALL)
-    private List<Items> items;
+	@NotNull
+
+	@Email(message = "Enter a valid email id")
+	@NotBlank(message = "Email is required")
+	@Column(unique = true)
+	private String email;
+
+	@NotNull
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@Column(name = "password")
+	private String password;
+
+	@NotNull
+	@Column(name = "role")
+	private String role;
+
+	@NotNull
+	@Column(name = "display_name")
+	private String name;
+
+	@NotNull
+	@Column(name = "address")
+	private String address;
+
+	@NotNull
+	@Column(name = "contact", unique = true)
+	private long contact;
+
+	@Column(name = "account_status")
+	private String account_status = "inactive";
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Items> items;
 }
-
