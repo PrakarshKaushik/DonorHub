@@ -42,14 +42,7 @@ public class NgoController {
 		return ngoServiceImpl.getAllItems();
 	}
 	
-	//----------------------------------------------------------------
-
-	// Endpoint - Get all Orders
-//	@GetMapping("/NgoAllOrders")
-//	public List<Orders> getAllOrders(Authentication authentication) {
-//		return orderServiceImpl.getAllNgoOrders(authentication);
-//	}
-	
+	//Endpoint - Get All Orders
 	@GetMapping("/NgoAllOrders")
 	public List<Orders> getAllOrders(org.springframework.security.core.Authentication authentication) {
 		CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
@@ -57,13 +50,6 @@ public class NgoController {
 		
 		return ngoServiceImpl.getAllOrders(userDetail.getUser().getUserId());
 	}
-//=======
-//	public List<Orders> getAllOrders() {
-//		return ngoServiceImpl.getAllOrders();
-//>>>>>>> 4393660573b03175a51a3f9c3c14ec162836d1df
-//	}
-	
-	//-----------------------------------------------------------------
 
 	// Endpoint - Get item by Id
 	@GetMapping("/items/{id}")
@@ -77,7 +63,7 @@ public class NgoController {
 		@PutMapping("/bookItems")
 		public String bookItem(@RequestParam int itemId, @RequestParam int quantity, org.springframework.security.core.Authentication authentication) {
 			CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
-//			System.out.println(userDetail.getUser().getUserId());
+
 			return ngoServiceImpl.bookItem(itemId, quantity, userDetail.getUser().getUserId());
 
 		}

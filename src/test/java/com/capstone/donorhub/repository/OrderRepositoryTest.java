@@ -37,10 +37,10 @@ public class OrderRepositoryTest {
         mockOrderList.add(order2);
 
        
-        when(orderRepository.findAllOrdersByUser(anyInt())).thenReturn(mockOrderList);
+        when(orderRepository.findAllByUser(anyInt())).thenReturn(mockOrderList);
 
         
-        List<Orders> result = orderRepository.findAllOrdersByUser(ngoId);
+        List<Orders> result = orderRepository.findAllByUser(ngoId);
 
         
         assertEquals(2, result.size());

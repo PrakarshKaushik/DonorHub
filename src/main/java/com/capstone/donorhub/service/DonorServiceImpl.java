@@ -19,6 +19,7 @@ public class DonorServiceImpl {
 	@Autowired
 	private ItemRepository itemRepository;
 
+	//DonotItems
 	public List<Items> donorItem(int id) {
 		return itemRepository.donorItems(id);
 	}
@@ -38,23 +39,13 @@ public class DonorServiceImpl {
 		
 		int c=itemEntity.getQuantity();
 		itemEntity.setOfrQuantity(c);
-//		itemRepository.save(itemEntity);
+
 		
 
 		return itemRepository.save(itemEntity);
 	} 
 	
-//	public Items saveItem(Items itemEntity) {
-//		
-//		int c=itemEntity.getQuantity();
-//		itemEntity.setOfrQuantity(c);
-////		itemRepository.save(itemEntity);
-//		
-//
-//		return itemRepository.save(itemEntity);
-//	}
-	
-	//---------------------------------------------------------
+
 
 	public Items getSingleItem(int id) {
 
@@ -97,10 +88,7 @@ public class DonorServiceImpl {
 			
 			oldItem.get().setOfrQuantity(itemDTO.getQuantity());
 			BeanUtils.copyProperties(itemDTO, oldItem.get());
-//			oldItem.get().setQuantity(item.getQuantity());
-//			oldItem.get().setCategory(item.getCategory());
-//			oldItem.get().setItemName(item.getItemName());
-//			oldItem.get().setDeliveryMode(item.getDeliveryMode());
+
 			
 			
 			
@@ -109,7 +97,7 @@ public class DonorServiceImpl {
 			 
 
 
-//		return itemRepository.save(item);
+
 	}
 		else
 		{

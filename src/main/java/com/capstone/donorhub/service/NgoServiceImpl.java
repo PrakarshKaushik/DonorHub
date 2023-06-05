@@ -65,7 +65,7 @@ public class NgoServiceImpl {
 		{
 			return c;
 		}
-//		throw new RuntimeException("Item not found for id: " + id);
+
 
 	}
 

@@ -64,12 +64,7 @@ public class DonorController {
 	}
 	
 	
-//	@PostMapping("/addItem")
-//	public String saveItem(@Valid @RequestBody Items item) {
-//		donorServiceImpl.saveItem(item);
-//		return "item added";
-//
-//	}
+
 
 	// endpoint - delete an item
 	@DeleteMapping("/deleteItem")
@@ -86,7 +81,6 @@ public class DonorController {
 		
 		int userId= userDetail.getUser().getUserId();
 		return donorServiceImpl.updateItem(id, itemDTO,userId);
-//		return "Item updated";
 	}
 
 	// Endpoint - find item by name
