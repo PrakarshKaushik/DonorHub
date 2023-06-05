@@ -63,12 +63,12 @@ class NgoServiceImplTest {
 		List<Orders> orders = new ArrayList<>();
 		orders.add(new Orders());
 		orders.add(new Orders());
-		when(orderRepository.findAllOrdersByUser(ngoId)).thenReturn(orders);
+		when(orderRepository.findAllByUser(ngoId)).thenReturn(orders);
 
 		List<Orders> result = ngoService.getAllOrders(ngoId);
 
 		assertEquals(2, result.size());
-		verify(orderRepository, times(1)).findAllOrdersByUser(ngoId);
+		verify(orderRepository, times(1)).findAllByUser(ngoId);
 	}
 
 //GetSingleItem - Item Present

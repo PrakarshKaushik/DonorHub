@@ -9,6 +9,7 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.lang.reflect.Field;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.capstone.donorhub.dto.UserDTO;
 import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.entity.Orders;
 import com.capstone.donorhub.entity.User;
@@ -113,13 +115,22 @@ public class AdminControllerTest {
     //AddUser
     @Test
     public void testSaveUser() {
-        when(adminService.saveUser(any(User.class))).thenReturn(testUser);
-        
-        User result = adminController.saveUser(testUser);
-        
-        assertEquals(testUser, result);
+       
+        AdminServiceImpl adminService = mock(AdminServiceImpl.class);
+        UserDTO userDTO = new UserDTO();
+        User expectedUser = new User();
+        when(adminService.saveUser(userDTO)).thenReturn(expectedUser);
+        AdminController controller = new AdminController();
+        setField(controller, "adminServiceImpl", adminService);
+
+      
+        User result = controller.saveUser(userDTO);
+
+      
+        assertEquals(expectedUser, result);
+        verify(adminService, times(1)).saveUser(userDTO);
     }
-    
+
     //DeleteUser
     @Test
     public void testUserDeleted() {
@@ -134,27 +145,26 @@ public class AdminControllerTest {
     }
     
     
-    //DeleteItem
-    @Test
-    public void testItemDeleted() {
-        int itemId = 1;
-        
-        assertDoesNotThrow(() -> adminController.itemDeleted(itemId));
-        
-        verify(adminService, times(1)).deleteItem(itemId);
-    }
+ 
     
     //updateUser
     @Test
     public void testUpdateUser() {
+        
         int userId = 1;
+        UserDTO userDTO = new UserDTO();
+        AdminServiceImpl adminService = mock(AdminServiceImpl.class);
+        String expectedResponse = "User updated successfully.";
+        when(adminService.updateUser(userId, userDTO)).thenReturn(expectedResponse);
+        AdminController controller = new AdminController();
+        setField(controller, "adminServiceImpl", adminService);
+
         
-        when(adminService.saveUser(any(User.class))).thenReturn(testUser);
-        
-        User result = adminController.updateUser(userId, testUser);
-        
-        assertEquals(testUser, result);
-        assertEquals(userId, testUser.getUserId());
+        String result = controller.updateUser(userId, userDTO);
+
+      
+        assertEquals(expectedResponse, result);
+        verify(adminService, times(1)).updateUser(userId, userDTO);
     }
     
     //GetUserByName
@@ -185,4 +195,13 @@ public class AdminControllerTest {
         assertEquals(testUser, response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
-}
+    
+    private void setField(Object targetObject, String fieldName, Object fieldValue) {
+        try {
+            Field field = targetObject.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(targetObject, fieldValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }}

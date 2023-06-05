@@ -13,14 +13,20 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.Authentication;
 
 import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.entity.Orders;
+import com.capstone.donorhub.entity.User;
 import com.capstone.donorhub.respository.OrderRepository;
 import com.capstone.donorhub.service.NgoServiceImpl;
+import com.capstone.donorhub.entity.CustomUserDetail;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
+
+import java.lang.reflect.Field;
 
 @ExtendWith(MockitoExtension.class)
 public class NgoControllerTest {
@@ -63,18 +69,27 @@ public class NgoControllerTest {
 	}
 
 	// GetAllOrder
-	@Test
-	public void testGetAllOrders() {
-		int ngoId = 1;
-		List<Orders> orders = new ArrayList<>();
-		orders.add(testOrder);
 
-		when(ngoService.getAllOrders(ngoId)).thenReturn(orders);
+    @Test
+    public void testGetAllOrders() {
+      
+        NgoServiceImpl ngoService = mock(NgoServiceImpl.class);
+        Authentication authentication = mock(Authentication.class);
+        CustomUserDetail userDetail = mock(CustomUserDetail.class);
+        List<Orders> expectedOrders = new ArrayList<>();
+        when(authentication.getPrincipal()).thenReturn(userDetail);
+        when(userDetail.getUser()).thenReturn(mock(User.class));
+        when(ngoService.getAllOrders(anyInt())).thenReturn(expectedOrders);
+        NgoController controller = new NgoController();
+        setField(controller, "ngoServiceImpl", ngoService);
 
-		List<Orders> result = ngoController.getAllOrders(ngoId);
+      
+        List<Orders> result = controller.getAllOrders(authentication);
 
-		assertEquals(orders, result);
-	}
+        
+        assertEquals(expectedOrders, result);
+        verify(ngoService, times(1)).getAllOrders(anyInt());
+    }
 
 	// GetItemById
 	@Test
@@ -89,20 +104,33 @@ public class NgoControllerTest {
 	}
 
 	// Book Item
-	@Test
-	public void testBookItem() {
-		int itemId = 1;
-		int quantity = 5;
-		int ngoId = 1;
-		String expectedResponse = "Item booked";
+    @Test
+    public void testBookItem() {
+        
+        NgoServiceImpl ngoService = mock(NgoServiceImpl.class);
+        int itemId = 123;
+        int quantity = 2;
+        int userId = 456;
+        String expectedResponse = "Success";
+        Authentication authentication = mock(Authentication.class);
+        CustomUserDetail userDetail = mock(CustomUserDetail.class);
+        User user = mock(User.class);
+        when(authentication.getPrincipal()).thenReturn(userDetail);
+        when(userDetail.getUser()).thenReturn(user);
+        when(user.getUserId()).thenReturn(userId);
+        when(ngoService.bookItem(itemId, quantity, userId)).thenReturn(expectedResponse);
+        NgoController controller = new NgoController();
+        setField(controller, "ngoServiceImpl", ngoService);
 
-		when(ngoService.bookItem(itemId, quantity, ngoId)).thenReturn(expectedResponse);
+       
+        String result = controller.bookItem(itemId, quantity, authentication);
 
-		String result = ngoController.bookItem(itemId, quantity, ngoId);
+        
+        assertEquals(expectedResponse, result);
+        verify(ngoService, times(1)).bookItem(itemId, quantity, userId);
+    }
 
-		assertEquals(expectedResponse, result);
-	}
-
+	 
 	// GetItemByCategory
 	@Test
 	public void testGetItemByCategory() {
@@ -130,4 +158,14 @@ public class NgoControllerTest {
 
 		assertEquals(expectedResponse, result);
 	}
+	
+	 private void setField(Object targetObject, String fieldName, Object fieldValue) {
+	        try {
+	            Field field = targetObject.getClass().getDeclaredField(fieldName);
+	            field.setAccessible(true);
+	            field.set(targetObject, fieldValue);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
 }

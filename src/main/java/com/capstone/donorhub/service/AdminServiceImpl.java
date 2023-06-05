@@ -42,17 +42,13 @@ public class AdminServiceImpl {
 		return userRepository.save(userEntity);
 	}
 	
-//	public User saveUser(User user) {
-//		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-//		return userRepository.save(user);
-//	}
 
-	//-----------------------------------------------
+	
 	public List<Items> getAllItem() {
 		return itemRepository.findAll();
 	}
 
-	//------------------------------------------------
+	
 	
 	public User getSingleUser(int id) {
 		
@@ -108,10 +104,7 @@ public class AdminServiceImpl {
 			
 			 
 	
-//	public User updateUser(User user) {
-//		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
-//		return userRepository.save(user);
-//	}
+
 
 	//------------------------------------------------------
 	public String deleteItem(int id) {

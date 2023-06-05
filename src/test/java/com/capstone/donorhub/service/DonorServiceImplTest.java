@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +21,9 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.capstone.donorhub.dto.ItemDTO;
 import com.capstone.donorhub.entity.Items;
+import com.capstone.donorhub.entity.User;
 import com.capstone.donorhub.respository.ItemRepository;
 import com.capstone.donorhub.service.DonorServiceImpl;
 
@@ -34,34 +37,50 @@ class DonorServiceImplTest {
 	private DonorServiceImpl donorService;
 
 	// Test GetAllItems
-	@Test
-	void testGetAllItem() {
+	 @Test
+	    public void testDonorItem() {
+	        List<Items> expectedItems = Arrays.asList(new Items(), new Items());
 
-		List<Items> items = new ArrayList<>();
-		items.add(new Items());
-		when(itemRepository.findAll()).thenReturn(items);
+	        when(itemRepository.donorItems(anyInt())).thenReturn(expectedItems);
 
-		List<Items> result = donorService.getAllItem();
+	        
+	        int id = 123;
+	        List<Items> actualItems = donorService.donorItem(id);
 
-		assertNotNull(result);
-		assertEquals(1, result.size());
-	
-		verify(itemRepository).findAll();
-	}
+	      
+	        assertEquals(expectedItems, actualItems);
+
+	    
+	        verify(itemRepository, times(1)).donorItems(id);
+	    }
 
 	// Test case for saveItem(Items itemEntity)
-	@Test
-	void testSaveItem() {
+	 @Test
+	    public void testSaveItem() {
+	       
+	        ItemDTO itemDTO = new ItemDTO();
+	        itemDTO.setUserId(123);
+	        itemDTO.setItemName("Test Item");
+	        itemDTO.setQuantity(5);
 
-		Items item = new Items();
-		when(itemRepository.save(item)).thenReturn(item);
+	       
+	        Items savedItem = new Items();
+	        savedItem.setItemId(1);
+	        savedItem.setItemName("Test Item");
+	        savedItem.setQuantity(5);
 
-		Items result = donorService.saveItem(item);
+	       
+	        when(itemRepository.save(any(Items.class))).thenReturn(savedItem);
 
-		assertNotNull(result);
-		assertEquals(item, result);
-		verify(itemRepository).save(item);
-	}
+	        
+	        Items result = donorService.saveItem(itemDTO);
+
+	        
+	        assertEquals(savedItem, result);
+
+	      
+	        verify(itemRepository, times(1)).save(any(Items.class));
+	    }
 
 	// Test case for getSingleItem(int id)
 	@Test
@@ -85,17 +104,17 @@ class DonorServiceImplTest {
 	    void testDeleteItem_ItemPresent() {
 	        int itemId = 4;
 	        
-	        // Mocking the behavior of itemRepository.findById
+	      
 	        Items item = new Items();
 	        when(itemRepository.findById(itemId)).thenReturn(Optional.of(item));
 	        
-	        // Perform the deleteItem operation
+	       
 	        String result = donorService.deleteItem(itemId);
 	        
-	        // Verify that deleteById method is called once with the correct itemId
+	      
 	        Mockito.verify(itemRepository, Mockito.times(1)).deleteById(itemId);
 	        
-	        // Add assertions to verify the return value
+	       
 	        assertEquals("item deleted", result, "The deleteItem method should return 'item deleted'.");
 	    }
 	    
@@ -104,50 +123,99 @@ class DonorServiceImplTest {
 	    void testDeleteItem_ItemNotPresent() {
 	        int itemId = 4;
 	        
-	        // Mocking the behavior of itemRepository.findById
 	        when(itemRepository.findById(itemId)).thenReturn(Optional.empty());
 	        
-	        // Perform the deleteItem operation
 	        String result = donorService.deleteItem(itemId);
-	        
-	        // Verify that deleteById method is not called
+	    
 	        Mockito.verify(itemRepository, Mockito.never()).deleteById(anyInt());
-	        
-	        // Add assertions to verify the return value
+	    
 	        assertEquals("No such item is present", result, "The deleteItem method should return 'No such item is present'.");
 	    }
 	
 	// Test case for updateItem(Items item)
-	@Test
-	void testUpdateItem() {
+	    @Test
+	    public void testUpdateItem_ItemFoundAndBelongsToUser() {
+	        int itemId = 1;
+	        int userId = 1;
 
-		Items item = new Items();
-		when(itemRepository.save(item)).thenReturn(item);
+	       
+	        ItemDTO itemDTO = new ItemDTO();
+	        itemDTO.setItemName("Updated Item");
+	        itemDTO.setQuantity(10);
+	     
 
-		Items result = donorService.updateItem(item);
+	      
+	        Items oldItem = new Items();
+	        oldItem.setItemId(itemId);
+	        oldItem.setItemName("Old Item");
+	        oldItem.setQuantity(5);
+	        User user = new User();
+	        user.setUserId(userId);
+	        oldItem.setUser(user);
+	       
+	        Optional<Items> optionalOldItem = Optional.of(oldItem);
 
-		assertNotNull(result);
-		assertEquals(item, result);
-		verify(itemRepository).save(item);
-	}
+	       
+	        when(itemRepository.findById(itemId)).thenReturn(optionalOldItem);
 
+	        
+	        String result = donorService.updateItem(itemId, itemDTO, userId);
+
+	       
+	        verify(itemRepository, times(1)).findById(itemId);
+
+	        
+	        verify(itemRepository, times(1)).save(oldItem);
+
+	    
+	        assertEquals("Item updated", result);
+	        assertEquals(itemDTO.getItemName(), oldItem.getItemName());
+	        assertEquals(itemDTO.getQuantity(), oldItem.getQuantity());
+	    
+	    }
+
+	    @Test
+	    public void testUpdateItem_ItemNotFoundOrDoesNotBelongToUser() {
+	        int itemId = 1;
+	        int userId = 2;
+
+	     
+	        ItemDTO itemDTO = new ItemDTO();
+	        itemDTO.setItemName("Updated Item");
+	        itemDTO.setQuantity(10);
+	        
+	        Optional<Items> optionalOldItem = Optional.empty();
+
+	      
+	        when(itemRepository.findById(itemId)).thenReturn(optionalOldItem);
+
+	      
+	        String result = donorService.updateItem(itemId, itemDTO, userId);
+
+	        
+	        verify(itemRepository, times(1)).findById(itemId);
+
+	       
+	        verify(itemRepository, never()).save(any(Items.class));
+
+	       
+	        assertEquals("Item not found or does not belong to the user", result);
+	    }
 	// Test case for getItemsByName(String name)
 	   @Test
 	    void testGetItemsByName_ItemsFound() {
 	        String itemName = "item";
 
-	        // Mocking the behavior of itemRepository.findByItemName
+	     
 	        List<Items> itemList = new ArrayList<>();
 	        itemList.add(new Items());
 	        when(itemRepository.findByItemName(itemName)).thenReturn(itemList);
 
-	        // Perform the getItemsByName operation
+	       
 	        List<Items> result = donorService.getItemsByName(itemName);
 
-	        // Verify that findByItemName method is called once with the correct itemName
 	        verify(itemRepository, times(1)).findByItemName(itemName);
 
-	        // Add assertions to verify the result
 	        assertEquals(itemList, result, "The getItemsByName method should return the list of items.");
 	    }
 
@@ -155,16 +223,12 @@ class DonorServiceImplTest {
 	    void testGetItemsByName_ItemsNotFound() {
 	        String itemName = "item";
 
-	        // Mocking the behavior of itemRepository.findByItemName
 	        when(itemRepository.findByItemName(itemName)).thenReturn(new ArrayList<>());
 
-	        // Perform the getItemsByName operation
 	        List<Items> result = donorService.getItemsByName(itemName);
 
-	        // Verify that findByItemName method is called once with the correct itemName
 	        verify(itemRepository, times(1)).findByItemName(itemName);
 
-	        // Add assertions to verify the result
 	        assertEquals(new ArrayList<>(), result, "The getItemsByName method should return an empty list.");
 	    }
 	}

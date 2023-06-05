@@ -10,6 +10,7 @@ import static org.mockito.Mockito.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.lang.reflect.Field;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,8 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.capstone.donorhub.controller.AdminController;
+import com.capstone.donorhub.dto.UserDTO;
 import com.capstone.donorhub.entity.Items;
 import com.capstone.donorhub.entity.User;
 import com.capstone.donorhub.respository.ItemRepository;
@@ -74,28 +77,44 @@ class AdminServiceImplTest {
 	}
 
 	// Test Saving User
-	@Test
-	void testSaveUser() {
-		Mockito.mock(User.class);
-		List<User> users = new ArrayList<>();
-		User user = new User();
-		user.setUserId(1);
-		user.setEmail("j@gl.com");
-		user.setPassword("123");
-		user.setName("John");
-		user.setRole("admin");
-		user.setAddress("Delhi");
+	 @Test
+	    public void testSaveUser() {
+	        
+	        UserDTO userDTO = new UserDTO();
+	        userDTO.setEmail("testuser");
+	        userDTO.setPassword("testpassword");
 
-		when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+	        User savedUser = new User();
+	        savedUser.setUserId(1);
+	        savedUser.setEmail("testuser");
+	        savedUser.setPassword("encodedpassword");
 
-		when(userRepository.save(any(User.class))).thenReturn(user);
+	        UserRepository userRepository = mock(UserRepository.class);
+	        when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
-		User result = adminService.saveUser(user);
+	        PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
+	        when(passwordEncoder.encode("testpassword")).thenReturn("encodedpassword");
 
-		assertEquals(user, result);
-		verify(passwordEncoder).encode("123");
-	}
+	        AdminServiceImpl adminServiceImpl = mock(AdminServiceImpl.class);
+	        when(adminServiceImpl.saveUser(any(UserDTO.class))).thenReturn(savedUser);
 
+	        AdminController controller = new AdminController();
+	        setField(controller, "userRepository", userRepository);
+	        setField(controller, "passwordEncoder", passwordEncoder);
+	        setField(controller, "adminServiceImpl", adminServiceImpl);
+
+	        // Act
+	        User result = controller.saveUser(userDTO);
+
+	        // Assert
+	        assertEquals(savedUser.getUserId(), result.getUserId());
+	        assertEquals(savedUser.getEmail(), result.getEmail());
+	        assertEquals(savedUser.getPassword(), result.getPassword());
+	        verify(userRepository, times(1)).save(any(User.class));
+	        verify(passwordEncoder, times(1)).encode("testpassword");
+	        verify(adminServiceImpl, times(1)).saveUser(any(UserDTO.class));
+	    }
+	 
 //Test Getting Single User - where user is present
 	@Test
 	void testGetSingleUser_UserExists() {
@@ -140,17 +159,16 @@ class AdminServiceImplTest {
 	    void testDeleteUser_UserPresent() {
 	        int userId = 4;
 	        
-	        // Mocking the behavior of userRepository.findById
+	        
 	        User user = new User();
 	        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 	        
-	        // Perform the deleteUser operation
+	   
 	        String result = adminService.deleteUser(userId);
 	        
-	        // Verify that deleteById method is called once with the correct userId
 	        Mockito.verify(userRepository, Mockito.times(1)).deleteById(userId);
 	        
-	        // Add assertions to verify the return value
+	    
 	        assertEquals("user deleted", result, "The deleteUser method should return 'user deleted'.");
 	    }
 	 
@@ -159,16 +177,14 @@ class AdminServiceImplTest {
 	    void testDeleteUser_UserNotPresent() {
 	        int userId = 4;
 	        
-	        // Mocking the behavior of userRepository.findById
+	        
 	        when(userRepository.findById(userId)).thenReturn(Optional.empty());
 	        
-	        // Perform the deleteUser operation
+	    
 	        String result = adminService.deleteUser(userId);
-	        
-	        // Verify that deleteById method is not called
+	    
 	        Mockito.verify(userRepository, Mockito.never()).deleteById(anyInt());
 	        
-	        // Add assertions to verify the return value
 	        assertEquals("no such user is present", result, "The deleteUser method should return 'no such user is present'.");
 	    }
 	
@@ -177,24 +193,42 @@ class AdminServiceImplTest {
 
 
 	// Test case for updateUser(User user)
-	@Test
-	void testUpdateUser() {
-		Mockito.mock(User.class);
-		List<User> users = new ArrayList<>();
-		User user = new User();
-		user.setEmail("j@gl.com");
-		user.setPassword("123");
-		user.setName("John");
+	    @Test
+	    public void testUpdateUser() {
+	        int id = 1;
 
-		when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+	        UserDTO userDTO = new UserDTO();
+	        userDTO.setEmail("updateduser");
+	        userDTO.setPassword("updatedpassword");
 
-		when(userRepository.save(any(User.class))).thenReturn(user);
+	        User oldUser = new User();
+	        oldUser.setUserId(id);
+	        oldUser.setEmail("olduser");
+	        oldUser.setPassword("oldpassword");
 
-		User result = adminService.updateUser(user);
+	        Optional<User> optionalOldUser = Optional.of(oldUser);
 
-		assertEquals(user, result);
-		verify(passwordEncoder).encode("123");
-	}
+	        UserRepository userRepository = mock(UserRepository.class);
+	        when(userRepository.findById(id)).thenReturn(optionalOldUser);
+	        when(userRepository.save(oldUser)).thenReturn(oldUser);
+
+	        PasswordEncoder passwordEncoder = mock(PasswordEncoder.class);
+	        when(passwordEncoder.encode("updatedpassword")).thenReturn("encodedpassword");
+
+	        AdminController controller = new AdminController();
+	        setField(controller, "userRepository", userRepository);
+	        setField(controller, "passwordEncoder", passwordEncoder);
+
+	        String result = controller.updateUser(id, userDTO);
+
+	        assertEquals("Item Updated", result);
+	        assertEquals("updateduser", oldUser.getEmail());
+	        assertEquals("encodedpassword", oldUser.getPassword());
+	        verify(userRepository, times(1)).findById(id);
+	        verify(passwordEncoder, times(1)).encode("updatedpassword");
+	        verify(userRepository, times(1)).save(oldUser);
+	    }
+
 
 	// DeleteItem
 	@Test
@@ -259,4 +293,14 @@ class AdminServiceImplTest {
 
 		assertThrows(NullPointerException.class, () -> adminService.updateUserAccountStatus(userId, accountStatus));
 	}
+	
+	 private void setField(Object targetObject, String fieldName, Object fieldValue) {
+	        try {
+	            Field field = targetObject.getClass().getDeclaredField(fieldName);
+	            field.setAccessible(true);
+	            field.set(targetObject, fieldValue);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
 }

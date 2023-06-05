@@ -66,10 +66,6 @@ public class AdminController {
 	}
 	
 	
-//	@PostMapping("/saveUsers")
-//	public User saveUser(@Valid @RequestBody User user) {
-//		return adminServiceImpl.saveUser(user);
-//	}
 
 	// Endpoint - delete a user
 	@DeleteMapping("/deleteUser")
@@ -78,11 +74,7 @@ public class AdminController {
 		
 	}
 
-	// Endpoint - delete an item
-//	@DeleteMapping("/deleteItem")
-//	public void itemDeleted(@RequestParam int id) {
-//		adminServiceImpl.deleteItem(id);
-//	}
+
 
 	// Endpoint - Update user
 	@PutMapping("/updateUser/{id}")
